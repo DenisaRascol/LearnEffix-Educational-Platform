@@ -1,0 +1,129 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Segoe UI", Tahoma, sans-serif;
+}
+
+:root {
+    --maro-inchis: #3B2F2F;
+    --verde-inchis: #1F3D2B;
+    --alb-cald: #FAFAF9;
+    --bej-deschis: #EDE6D8;
+    --verde-deschis: #6FAF8E;
+}
+
+
+body {
+    background-color: var(--alb-cald);
+    color: var(--maro-inchis);
+}
+
+.navbar {
+    background-color: var(--verde-inchis);
+    color: var(--alb-cald);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 40px;
+}
+
+.navbar .logo {
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.navbar nav a {
+    color: var(--alb-cald);
+    text-decoration: none;
+    margin-left: 20px;
+    font-weight: 500;
+}
+
+.navbar nav a:hover {
+    text-decoration: underline;
+}
+
+.hero {
+    background-color: var(--bej-deschis);
+    text-align: center;
+    padding: 80px 20px;
+}
+
+.hero h1 {
+    font-size: 36px;
+    margin-bottom: 20px;
+}
+
+.hero p {
+    font-size: 18px;
+    max-width: 700px;
+    margin: 0 auto 30px;
+    line-height: 1.6;
+}
+
+.hero-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.btn {
+    padding: 12px 25px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background-color 0.3s;
+}
+
+.btn.primary {
+    background-color: var(--verde-inchis);
+    color: var(--alb-cald);
+}
+
+.btn.primary:hover {
+    background-color: var(--verde-deschis);
+}
+
+.btn.secondary {
+    background-color: var(--maro-inchis);
+    color: var(--alb-cald);
+}
+
+.btn.secondary:hover {
+    background-color: #5a4a4a;
+}
+
+.features {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    padding: 60px 40px;
+}
+
+.feature-card {
+    background-color: var(--alb-cald);
+    border: 1px solid var(--bej-deschis);
+    border-radius: 10px;
+    padding: 30px;
+    width: 280px;
+    text-align: center;
+}
+
+.feature-card h3 {
+    color: var(--verde-inchis);
+    margin-bottom: 15px;
+}
+
+.feature-card p {
+    font-size: 15px;
+    line-height: 1.5;
+}
+
+.footer {
+    background-color: var(--verde-inchis);
+    color: var(--alb-cald);
+    text-align: center;
+    padding: 15px;
+    font-size: 14px;
+}

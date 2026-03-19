@@ -1,0 +1,112 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EduPlatform - Dashboard profesor</title>
+  <link rel="stylesheet" href="{% static 'CSS/dashboard_profesor_style.css' %}" />
+</head>
+<body>
+
+  <header class="navbar">
+    <div class="logo">EduPlatform</div>
+    <nav>
+      <a href="#">Dashboard</a>
+      <a href="upload_pdf.html">Materiale</a>
+      <a href="#">Teste</a>
+      <a href="{% url 'login' %}" class="logout-btn">Logout</a>
+    </nav>
+  </header>
+
+  <main class="container">
+
+    <section class="page-header">
+      <div>
+        <h1>Dashboard profesor</h1>
+        <p class="subtitle">Gestionează materialele educaționale și testele asociate.</p>
+      </div>
+
+      <div class="quick-actions">
+        <a class="btn primary" href="upload_pdf.html">Încarcă PDF</a>
+        <a class="btn secondary" href="#">Creează lecție</a>
+      </div>
+    </section>
+
+    <section class="grid-3">
+      <div class="card summary">
+        <h3>Materiale încărcate</h3>
+        <p class="big">0</p>
+        <p class="muted">PDF-uri și lecții adăugate</p>
+      </div>
+
+      <div class="card summary">
+        <h3>Teste create</h3>
+        <p class="big">0</p>
+        <p class="muted">Teste disponibile pentru elevi</p>
+      </div>
+    </section>
+
+    <section class="grid-main">
+
+      <div class="card">
+        <div class="card-header">
+          <h2>Materiale recente</h2>
+          <a class="link" href="upload_pdf.html">Încarcă material</a>
+        </div>
+
+        <div class="empty-state">
+          <div class="empty-icon">📄</div>
+          <h3>Nu există materiale încărcate</h3>
+          <p class="muted">Încarcă primul PDF pentru a începe.</p>
+          <div class="empty-actions">
+            <a class="btn primary" href="upload_pdf.html">Încarcă PDF</a>
+            <a class="btn ghost" href="#">Adaugă lecție</a>
+          </div>
+        </div>
+      </div>
+
+      <aside class="side">
+
+        <div class="card">
+          <h2>Acțiuni rapide</h2>
+          <div class="quick-list">
+            <a class="quick-item" href="upload_pdf.html">
+              <span class="qi-icon">⬆️</span>
+              <div>
+                <h4>Încarcă material PDF</h4>
+                <p class="muted">Adaugă cursuri și fișiere</p>
+              </div>
+            </a>
+
+            <a class="quick-item" href="#">
+              <span class="qi-icon">📝</span>
+              <div>
+                <h4>Gestionează teste</h4>
+                <p class="muted">Creare și administrare</p>
+              </div>
+            </a>
+
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Notificări</h2>
+          <div class="empty-state small">
+            <div class="empty-icon">🔔</div>
+            <h3>Nu ai notificări</h3>
+            <p class="muted">Aici vor apărea actualizări despre activitate.</p>
+          </div>
+        </div>
+
+      </aside>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <p>© 2026 EduPlatform – Dashboard profesor</p>
+  </footer>
+
+</body>
+</html>

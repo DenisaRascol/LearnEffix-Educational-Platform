@@ -1,0 +1,140 @@
+html, body {
+  background-color: #EDE6D8;        /* bej foarte deschis */
+  color: #3B2F2F;                   /* maro inchis */
+  margin-top: 60px;
+  margin-bottom: 60px;
+  font-family: "Segoe UI", Tahoma, sans-serif;
+}
+
+.page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+}
+
+.card {
+  max-width: 700px;
+  width: 100%;
+  background: #FAFAF9;              /* alb cald */
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
+  border: 1px solid rgba(59, 47, 47, 0.10);
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #1F3D2B;                   /* verde inchis */
+}
+
+.row {
+  margin-bottom: 16px;
+  text-align: left;
+}
+
+.row label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+  color: #3B2F2F;
+}
+
+input,
+select {
+  width: 100%;
+  border-radius: 8px;
+  border: 1px solid #EDE6D8;
+  background: #FAFAF9;
+  color: #3B2F2F;
+  font-size: 14px;
+  box-sizing: border-box;
+  padding: 10px 12px;
+}
+
+input::placeholder {
+  color: #9C8F7A;
+}
+
+input:focus,
+select:focus {
+  outline: none;
+  border-color: #6FAF8E;            /* verde deschis */
+  box-shadow: 0 0 0 3px rgba(111, 175, 142, 0.25);
+}
+
+.two-col {
+  display: flex;
+  gap: 12px;
+}
+
+.two-col > div {
+  flex: 1;
+}
+
+.helper {
+  margin-top: 8px;
+  font-size: 13px;
+  line-height: 1.4;
+  color: rgba(59, 47, 47, 0.75);
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 18px;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.btn {
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 700;
+  border: none;
+}
+
+.btn.primary {
+  background: #1F3D2B;              /* verde inchis */
+  color: #FAFAF9;
+}
+
+.btn.primary:hover {
+  background: #6FAF8E;
+  color: #1F3D2B;
+}
+
+.btn.ghost {
+  background: transparent;
+  border: 1px solid #3B2F2F;
+  color: #3B2F2F;
+}
+
+.btn.ghost:hover {
+  background: #EDE6D8;
+}
+
+.login-link {
+  text-align: center;
+  margin-top: 16px;
+  font-size: 14px;
+  color: #3B2F2F;
+}
+
+.login-link a {
+  color: #6FAF8E;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.login-link a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 650px) {
+  .two-col {
+    flex-direction: column;
+  }
+}

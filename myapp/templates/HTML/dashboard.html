@@ -1,0 +1,134 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EduPlatform - Dashboard elev</title>
+  <link rel="stylesheet" href="{% static 'CSS/dashboard_style.css' %}" />
+</head>
+<body>
+
+  <!-- Navbar -->
+  <header class="navbar">
+    <div class="logo">EduPlatform</div>
+    <nav>
+        <a href="{% url 'home' %}">Acasă</a>
+        <a href="#">Lecții</a>
+        <a href="#">Teste</a>
+        <a href="{% url 'login' %}" class="logout-btn">Logout</a>
+    </nav>
+
+  </header>
+
+  <main class="container">
+
+    <!-- Header -->
+    <section class="page-header">
+      <div>
+        <h1>Dashboard elev</h1>
+        <p class="subtitle">
+          Începe cu prima lecție și platforma îți va completa progresul, testele și scorurile automat.
+        </p>
+      </div>
+
+      <div class="quick-actions">
+        <a class="btn primary" href="#">Explorează lecții</a>
+        <a class="btn secondary" href="#">Începe primul test</a>
+      </div>
+    </section>
+
+    <!-- Summary cards (zero state) -->
+    <section class="grid-3">
+      <div class="card summary">
+        <h3>Progres general</h3>
+        <div class="progress-wrap">
+          <div class="progress-bar">
+            <div class="progress-fill" style="width: 0%"></div>
+          </div>
+          <div class="progress-meta">
+            <span>0%</span>
+            <span class="muted">0 lecții parcurse</span>
+          </div>
+        </div>
+        <p class="hint">Parcurge prima lecție pentru a începe progresul.</p>
+      </div>
+
+      <div class="card summary">
+        <h3>Teste completate</h3>
+        <p class="big">0</p>
+        <p class="muted">Nu ai completat încă niciun test.</p>
+        <p class="hint">După ce finalizezi un test, rezultatul apare aici.</p>
+      </div>
+
+      <div class="card summary">
+        <h3>Scor mediu</h3>
+        <p class="big">—</p>
+        <p class="muted">Scorul mediu se calculează după primul test.</p>
+        <p class="hint">Începe un test pentru a genera statistici.</p>
+      </div>
+    </section>
+
+    <!-- Main grid -->
+    <section class="grid-main">
+
+      <!-- Lessons (empty state) -->
+      <div class="card">
+        <div class="card-header">
+          <h2>Lecțiile mele</h2>
+          <a class="link" href="#">Vezi toate</a>
+        </div>
+
+        <div class="empty-state">
+          <div class="empty-icon">📚</div>
+          <h3>Nu ai lecții începute</h3>
+          <p class="muted">
+            Când începi o lecție, va apărea aici cu status și progres.
+          </p>
+          <div class="empty-actions">
+            <a class="btn primary" href="#">Alege o lecție</a>
+            <a class="btn ghost" href="#">Cum funcționează?</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Side panel -->
+      <aside class="side">
+
+        <!-- Recent tests (empty state) -->
+        <div class="card">
+          <h2>Teste recente</h2>
+
+          <div class="empty-state small">
+            <div class="empty-icon">✅</div>
+            <h3>Încă nu ai teste</h3>
+            <p class="muted">
+              După ce finalizezi un test, istoricul va apărea aici.
+            </p>
+            <div class="empty-actions">
+              <a class="btn small secondary" href="#">Începe un test</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recommendations -->
+        <div class="card">
+          <h2>Recomandări</h2>
+          <ul class="recommendations">
+            <li>Începe cu o lecție introductivă pentru a activa progresul.</li>
+            <li>Rezolvă un test scurt ca să obții primul scor.</li>
+            <li>Revenino zilnic pentru a menține consistența.</li>
+          </ul>
+        </div>
+
+      </aside>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <p>© 2026 EduPlatform – Dashboard elev</p>
+  </footer>
+
+</body>
+</html>

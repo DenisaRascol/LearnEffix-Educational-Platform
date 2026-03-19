@@ -1,0 +1,73 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Înregistrează-te</title>
+  <link rel="stylesheet" href="{% static 'CSS/style.css' %}">
+  <link rel="stylesheet" href="{% static 'CSS/register_style.css' %}">
+</head>
+<body>
+
+<main class="page">
+  <section class="card">
+    <h1>Înregistrează-te</h1>
+
+    {% if eroare %}
+      <div style="background-color: #ffe6e6; color: #ff4d4d; padding: 10px; border-radius: 8px; margin-bottom: 20px; text-align: center; border: 1px solid #ff4d4d; font-weight: 600;">
+          {{ eroare }}
+      </div>
+    {% endif %}
+
+    <form class="register-form" method="POST">
+      {% csrf_token %}
+      
+      <div class="row">
+        <label for="username">Nume utilizator</label>
+        <input id="username" type="text" name="nume" placeholder="ex: AnaPopescu" required>
+      </div>
+
+      <div class="row">
+        <label for="email">Email</label>
+        <input id="email" type="email" name="email" placeholder="ex: anapopescu@gmail.com" required>
+      </div>
+
+      <div class="row two-col">
+        <div>
+          <label for="password">Parolă</label>
+          <input id="password" type="password" name="password" placeholder="Minim 8 caractere" required>
+        </div>
+        <div>
+          <label for="confirm_password">Confirmă parola</label>
+          <input id="confirm_password" type="password" name="confirm_password" placeholder="Reintrodu parola" required>
+        </div>
+      </div>
+
+      <div class="row">
+        <label for="role">Tip cont</label>
+        <select name="role" id="role" required>
+          <option value="" selected disabled>Alege tipul contului</option>
+          <option value="elev">Elev</option>
+          <option value="profesor">Profesor</option>
+        </select>
+        <p class="helper">
+          În funcție de rol, vei avea acces la funcționalități diferite (lecții/teste sau încărcare materiale).
+        </p>
+      </div>
+
+      <div class="actions">
+        <button type="submit" class="btn primary">Creează cont</button>
+        <button type="reset" class="btn ghost">Resetează</button>
+      </div>
+
+      <p class="login-link">
+        Ai deja cont? <a href="{% url 'login' %}">Mergi la login</a>
+      </p>
+
+    </form>
+  </section>
+</main>
+
+</body>
+</html>

@@ -1,0 +1,55 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <title>EduPlatform - Home</title>
+    <link rel="stylesheet" href="{% static 'CSS/home_style.css' %}">        
+</head>
+<body>
+
+    <header class="navbar">
+        <div class="logo">EduPlatform</div>
+        <nav>
+            <a href="#">Acasă</a>
+            <a href="#">Lecții</a>
+            <a href="#">Teste</a>
+            <a href="{% url 'login' %}">Autentificare</a>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <h1>Învață inteligent. Testează-te automat.</h1>
+        <p>
+            Platformă educațională web pentru elevi și profesori,
+            cu lecții structurate și teste generate automat din materiale PDF.
+        </p>
+        <div class="hero-buttons">
+            <a href="#" class="btn primary">Începe acum</a>
+            <a href="#" class="btn secondary">Află mai multe</a>
+        </div>
+    </section>
+
+    <section class="features">
+        <div class="feature-card">
+            <h3>Lecții structurate</h3>
+            <p>Accesează materiale educaționale organizate logic și ușor de parcurs.</p>
+        </div>
+
+        <div class="feature-card">
+            <h3>Teste automate</h3>
+            <p>Verifică-ți cunoștințele prin teste generate automat.</p>
+        </div>
+
+        <div class="feature-card">
+            <h3>Generare din PDF</h3>
+            <p>Profesorii pot încărca fișiere PDF din care se creează teste.</p>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <p>© 2026 EduPlatform – Proiect licență</p>
+    </footer>
+
+</body>
+</html>
