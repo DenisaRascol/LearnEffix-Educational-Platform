@@ -1,0 +1,30 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Vizualizare Test</title>
+    <link rel="stylesheet" href="{% static 'CSS/style.css' %}">
+</head>
+<body style="padding: 50px; background-color: #f4f7f6; font-family: sans-serif;">
+    <div style="max-width: 800px; margin: auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+        <h1>{{ test.titlu }}</h1>
+        <p>Sursa material: {{ test.material_sursa.titlu }}</p>
+        <hr>
+        
+        {% for intrebare in intrebari %}
+            <div style="margin-bottom: 30px;">
+                <h3>{{ forloop.counter }}. {{ intrebare.text_intrebare }}</h3>
+                <ul style="list-style-type: none; padding: 0;">
+                    <li><strong>A:</strong> {{ intrebare.varianta_a }}</li>
+                    <li><strong>B:</strong> {{ intrebare.varianta_b }}</li>
+                    <li><strong>C:</strong> {{ intrebare.varianta_c }}</li>
+                    <li><strong>D:</strong> {{ intrebare.varianta_d }}</li>
+                </ul>
+                <p style="color: green;"><strong>Răspuns corect: {{ intrebare.raspuns_corect }}</strong></p>
+            </div>
+        {% endfor %}
+        
+        <a href="{% url 'dashboard_profesor' %}" class="btn">Înapoi la Dashboard</a>
+    </div>
+</body>
+</html>

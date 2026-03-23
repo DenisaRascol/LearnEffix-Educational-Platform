@@ -1,0 +1,43 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LearnEffix - Încarcă Material</title>
+    <link rel="stylesheet" href="{% static 'CSS/incarcare_style.css' %}">
+</head>
+<body>
+
+    <div class="upload-container">
+        <h1>Adaugă Material</h1>
+        <p class="subtitle">Încarcă un fișier PDF pentru a genera automat un test.</p>
+
+        {% if mesaj %}
+            <div class="alert-success">
+                {{ mesaj }}
+            </div>
+        {% endif %}
+
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label for="titlu">Titlu material</label>
+                <input type="text" id="titlu" name="titlu" placeholder="Ex: Lecția 1 - Anatomie" required>
+            </div>
+
+            <div class="form-group">
+                <label for="fisier_pdf">Fișier PDF</label>
+                <input type="file" id="fisier_pdf" name="fisier_pdf" accept=".pdf" required>
+            </div>
+
+            <div class="btn-group">
+                <button type="submit" class="btn btn-submit">Încarcă și procesează</button>
+                <a href="{% url 'dashboard_profesor' %}" class="btn btn-back">Anulează</a>
+            </div>
+        </form>
+    </div>
+
+</body>
+</html>

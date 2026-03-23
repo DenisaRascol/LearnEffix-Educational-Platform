@@ -4,18 +4,18 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>EduPlatform - Dashboard profesor</title>
+  <title>LearnEffix - Dashboard profesor</title>
   <link rel="stylesheet" href="{% static 'CSS/dashboard_profesor_style.css' %}" />
 </head>
 <body>
 
   <header class="navbar">
-    <div class="logo">EduPlatform</div>
+    <div class="logo">LearnEffix</div>
     <nav>
       <a href="#">Dashboard</a>
-      <a href="upload_pdf.html">Materiale</a>
+      <a href="{% url 'incarcare_material' %}">Materiale</a>
       <a href="#">Teste</a>
-      <a href="{% url 'login' %}" class="logout-btn">Logout</a>
+      <a href="{% url 'logout' %}" class="logout-btn">Logout</a>
     </nav>
   </header>
 
@@ -28,42 +28,54 @@
       </div>
 
       <div class="quick-actions">
-        <a class="btn primary" href="upload_pdf.html">Încarcă PDF</a>
+        <a class="btn primary" href="{% url 'incarcare_material' %}">Încarcă PDF</a>
         <a class="btn secondary" href="#">Creează lecție</a>
       </div>
     </section>
 
     <section class="grid-3">
-      <div class="card summary">
-        <h3>Materiale încărcate</h3>
-        <p class="big">0</p>
-        <p class="muted">PDF-uri și lecții adăugate</p>
-      </div>
-
-      <div class="card summary">
-        <h3>Teste create</h3>
-        <p class="big">0</p>
-        <p class="muted">Teste disponibile pentru elevi</p>
-      </div>
+      
     </section>
 
     <section class="grid-main">
+<div class="card summary">
+    <h3>Materiale încărcate</h3>
+    <p class="big">{{ nr_materiale|default:0 }}</p> 
+    <p class="muted">PDF-uri și lecții adăugate</p>
+</div>
 
+<div class="card summary">
+    <h3>Teste create</h3>
+    <p class="big">{{ nr_teste|default:0 }}</p> 
+    <p class="muted">Teste disponibile pentru elevi</p>
+</div>
       <div class="card">
         <div class="card-header">
-          <h2>Materiale recente</h2>
-          <a class="link" href="upload_pdf.html">Încarcă material</a>
+          <h2>Teste generate recent</h2>
+          <a class="link" href="{% url 'incarcare_material' %}">Încarcă material nou</a>
         </div>
 
-        <div class="empty-state">
-          <div class="empty-icon">📄</div>
-          <h3>Nu există materiale încărcate</h3>
-          <p class="muted">Încarcă primul PDF pentru a începe.</p>
-          <div class="empty-actions">
-            <a class="btn primary" href="upload_pdf.html">Încarcă PDF</a>
-            <a class="btn ghost" href="#">Adaugă lecție</a>
+        {% if teste %}
+          <div class="teste-lista" style="padding: 20px;">
+            {% for test in teste %}
+              <div class="test-row" style="display: flex; justify-content: space-between; align-items: center; padding: 15px; border-bottom: 1px solid #eee;">
+                <div>
+                  <strong style="color: #1a5c37; font-size: 1.1rem;">{{ test.titlu }}</strong>
+                  <p class="muted" style="margin: 5px 0 0 0; font-size: 0.85rem;">Sursă: {{ test.material_sursa.titlu }} | Creat la: {{ test.creat_la|date:"d.m.Y H:i" }}</p>
+                </div>
+              <a href="{% url 'detalii_test' test.id %}" class="btn ghost">Vezi testul</a>              </div>
+            {% endfor %}
           </div>
-        </div>
+        {% else %}
+          <div class="empty-state">
+            <div class="empty-icon">📄</div>
+            <h3>Nu există teste generate</h3>
+            <p class="muted">Încarcă primul PDF pentru a genera automat un test bazat pe conținut.</p>
+            <div class="empty-actions">
+              <a class="btn primary" href="{% url 'incarcare_material' %}">Încarcă PDF</a>
+            </div>
+          </div>
+        {% endif %}
       </div>
 
       <aside class="side">
@@ -71,7 +83,7 @@
         <div class="card">
           <h2>Acțiuni rapide</h2>
           <div class="quick-list">
-            <a class="quick-item" href="upload_pdf.html">
+            <a class="quick-item" href="{% url 'incarcare_material' %}">
               <span class="qi-icon">⬆️</span>
               <div>
                 <h4>Încarcă material PDF</h4>
@@ -105,7 +117,7 @@
   </main>
 
   <footer class="footer">
-    <p>© 2026 EduPlatform – Dashboard profesor</p>
+    <p>© 2026 LearnEffix – Dashboard profesor</p>
   </footer>
 
 </body>
