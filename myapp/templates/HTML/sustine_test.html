@@ -1,0 +1,74 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test: {{ test.titlu }}</title>
+    <link rel="stylesheet" href="{% static 'CSS/quiz_style.css' %}">
+</head>
+<body class="quiz-body">
+
+    <header class="navbar-quiz">
+        <div class="logo">LearnEffix</div>
+        <div class="test-info">
+            <span class="test-name">{{ test.titlu }}</span>
+            <div class="timer-box">
+                <span class="icon">⏱️</span>
+                <span id="timer">Test în desfășurare</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="quiz-container">
+        <form action="{% url 'calculeaza_rezultat' test.id %}" method="POST" id="quiz-form">
+            {% csrf_token %}
+            
+            <div class="quiz-header">
+                <h1>{{ test.titlu }}</h1>
+                <p class="subtitle">Asigură-te că ai selectat un răspuns pentru fiecare întrebare înainte de a trimite.</p>
+            </div>
+
+            {% for intrebare in test.intrebari.all %}
+            <section class="question-card">
+                <div class="question-number">Întrebarea {{ forloop.counter }}</div>
+                <h3 class="question-text">{{ intrebare.text_intrebare }}</h3>
+                
+                <div class="options-grid">
+                    <label class="option-container">
+                        <input type="radio" name="intrebare_{{ intrebare.id }}" value="A" required>
+                        <span class="checkmark">A</span>
+                        <span class="option-text">{{ intrebare.varianta_a }}</span>
+                    </label>
+
+                    <label class="option-container">
+                        <input type="radio" name="intrebare_{{ intrebare.id }}" value="B">
+                        <span class="checkmark">B</span>
+                        <span class="option-text">{{ intrebare.varianta_b }}</span>
+                    </label>
+
+                    <label class="option-container">
+                        <input type="radio" name="intrebare_{{ intrebare.id }}" value="C">
+                        <span class="checkmark">C</span>
+                        <span class="option-text">{{ intrebare.varianta_c }}</span>
+                    </label>
+
+                    <label class="option-container">
+                        <input type="radio" name="intrebare_{{ intrebare.id }}" value="D">
+                        <span class="checkmark">D</span>
+                        <span class="option-text">{{ intrebare.varianta_d }}</span>
+                    </label>
+                </div>
+            </section>
+            {% endfor %}
+
+            <div class="quiz-footer">
+                <button type="submit" class="btn-submit" onclick="return confirm('Ești sigur că vrei să finalizezi testul?')">
+                    Finalizează și Trimite Răspunsurile
+                </button>
+            </div>
+        </form>
+    </main>
+
+</body>
+</html>

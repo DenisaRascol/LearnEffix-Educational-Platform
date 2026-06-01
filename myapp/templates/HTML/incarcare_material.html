@@ -24,7 +24,7 @@
             
             <div class="form-group">
                 <label for="titlu">Titlu material</label>
-                <input type="text" id="titlu" name="titlu" placeholder="Ex: Lecția 1 - Anatomie" required>
+                <input type="text" id="titlu" name="titlu" placeholder="Ex: Lecția 1 - Programare" required>
             </div>
 
             <div class="form-group">
@@ -34,7 +34,7 @@
 
             <div class="btn-group">
                 <button type="submit" class="btn btn-submit">Încarcă și procesează</button>
-                <a href="{% url 'dashboard_profesor' %}" class="btn btn-back">Anulează</a>
+                <a href="{% url 'detalii_clasa' clasa.id %}" class="btn btn-back">← Înapoi la {{ clasa.nume_materie }}</a>
             </div>
         </form>
     </div>

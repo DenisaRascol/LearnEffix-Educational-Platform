@@ -12,106 +12,49 @@
   <header class="navbar">
     <div class="logo">LearnEffix</div>
     <nav>
-      <a href="#">Dashboard</a>
-      <a href="{% url 'incarcare_material' %}">Materiale</a>
-      <a href="#">Teste</a>
+      <a href="{% url 'home' %}">Acasă</a>
+      <a href="{% url 'dashboard_profesor' %}">Dashboard</a>
       <a href="{% url 'logout' %}" class="logout-btn">Logout</a>
     </nav>
   </header>
 
   <main class="container">
-
     <section class="page-header">
       <div>
         <h1>Dashboard profesor</h1>
-        <p class="subtitle">Gestionează materialele educaționale și testele asociate.</p>
+        <p class="subtitle">Gestionează clasele tale și interacțiunea cu studenții.</p>
       </div>
 
       <div class="quick-actions">
-        <a class="btn primary" href="{% url 'incarcare_material' %}">Încarcă PDF</a>
-        <a class="btn secondary" href="#">Creează lecție</a>
+        <a class="btn primary" href="{% url 'creeaza_clasa' %}">+ Creează clasă nouă</a>
       </div>
     </section>
 
     <section class="grid-3">
-      
-    </section>
-
-    <section class="grid-main">
-<div class="card summary">
-    <h3>Materiale încărcate</h3>
-    <p class="big">{{ nr_materiale|default:0 }}</p> 
-    <p class="muted">PDF-uri și lecții adăugate</p>
-</div>
-
-<div class="card summary">
-    <h3>Teste create</h3>
-    <p class="big">{{ nr_teste|default:0 }}</p> 
-    <p class="muted">Teste disponibile pentru elevi</p>
-</div>
-      <div class="card">
-        <div class="card-header">
-          <h2>Teste generate recent</h2>
-          <a class="link" href="{% url 'incarcare_material' %}">Încarcă material nou</a>
-        </div>
-
-        {% if teste %}
-          <div class="teste-lista" style="padding: 20px;">
-            {% for test in teste %}
-              <div class="test-row" style="display: flex; justify-content: space-between; align-items: center; padding: 15px; border-bottom: 1px solid #eee;">
-                <div>
-                  <strong style="color: #1a5c37; font-size: 1.1rem;">{{ test.titlu }}</strong>
-                  <p class="muted" style="margin: 5px 0 0 0; font-size: 0.85rem;">Sursă: {{ test.material_sursa.titlu }} | Creat la: {{ test.creat_la|date:"d.m.Y H:i" }}</p>
-                </div>
-              <a href="{% url 'detalii_test' test.id %}" class="btn ghost">Vezi testul</a>              </div>
-            {% endfor %}
+      {% for clasa in clase %}
+      <div class="card class-card">
+          <div class="card-header">
+              <h3>{{ clasa.nume_materie }}</h3>
+              <span class="badge-cod">{{ clasa.cod_inrolare }}</span>
           </div>
-        {% else %}
-          <div class="empty-state">
-            <div class="empty-icon">📄</div>
-            <h3>Nu există teste generate</h3>
-            <p class="muted">Încarcă primul PDF pentru a genera automat un test bazat pe conținut.</p>
-            <div class="empty-actions">
-              <a class="btn primary" href="{% url 'incarcare_material' %}">Încarcă PDF</a>
-            </div>
+          <p class="muted">{{ clasa.specializare }} - Anul {{ clasa.an_studiu }}</p>
+          <p class="code-display">Cod: <strong>{{ clasa.cod_inrolare }}</strong></p>
+
+        
+          <div class="class-info">
+              <span><strong>{{ clasa.nr_studenti }}</strong> studenți</span>
           </div>
-        {% endif %}
+
+          <div class="card-footer">
+            <a href="{% url 'detalii_clasa' clasa.id %}" class="btn ghost full-width">Accesează clasa</a>          </div>
       </div>
-
-      <aside class="side">
-
-        <div class="card">
-          <h2>Acțiuni rapide</h2>
-          <div class="quick-list">
-            <a class="quick-item" href="{% url 'incarcare_material' %}">
-              <span class="qi-icon">⬆️</span>
-              <div>
-                <h4>Încarcă material PDF</h4>
-                <p class="muted">Adaugă cursuri și fișiere</p>
-              </div>
-            </a>
-
-            <a class="quick-item" href="#">
-              <span class="qi-icon">📝</span>
-              <div>
-                <h4>Gestionează teste</h4>
-                <p class="muted">Creare și administrare</p>
-              </div>
-            </a>
-
-          </div>
-        </div>
-
-        <div class="card">
-          <h2>Notificări</h2>
-          <div class="empty-state small">
-            <div class="empty-icon">🔔</div>
-            <h3>Nu ai notificări</h3>
-            <p class="muted">Aici vor apărea actualizări despre activitate.</p>
-          </div>
-        </div>
-
-      </aside>
+      {% empty %}
+      <div class="empty-state wide">
+          <div class="empty-icon">🏫</div>
+          <h3>Nu ai nicio clasă creată</h3>
+          <p class="muted">Creează prima ta clasă pentru a putea încărca materiale și genera teste.</p>
+      </div>
+      {% endfor %}
     </section>
 
   </main>

@@ -1,6 +1,6 @@
 html, body {
-  background-color: #EDE6D8;        /* bej foarte deschis */
-  color: #3B2F2F;                   /* maro inchis */
+  background-color: #EDE6D8;       
+  color: #3B2F2F;              
   margin-top: 60px;
   margin-bottom: 60px;
   font-family: "Segoe UI", Tahoma, sans-serif;
@@ -16,7 +16,7 @@ html, body {
 .card {
   max-width: 700px;
   width: 100%;
-  background: #FAFAF9;              /* alb cald */
+  background: #FAFAF9;          
   padding: 30px;
   border-radius: 12px;
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
@@ -26,7 +26,7 @@ html, body {
 h1 {
   text-align: center;
   margin-bottom: 20px;
-  color: #1F3D2B;                   /* verde inchis */
+  color: #1F3D2B;                 
 }
 
 .row {
@@ -60,7 +60,7 @@ input::placeholder {
 input:focus,
 select:focus {
   outline: none;
-  border-color: #6FAF8E;            /* verde deschis */
+  border-color: #6FAF8E;           
   box-shadow: 0 0 0 3px rgba(111, 175, 142, 0.25);
 }
 
@@ -97,7 +97,7 @@ select:focus {
 }
 
 .btn.primary {
-  background: #1F3D2B;              /* verde inchis */
+  background: #1F3D2B;         
   color: #FAFAF9;
 }
 

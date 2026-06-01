@@ -1,0 +1,24 @@
+<div class="pdf-container">
+    <h1>Test: {{ test.titlu }}</h1>
+    <p class="sursa">Sursă material: {{ material_titlu }}</p>
+    <hr>
+
+    {% for i in intrebari %}
+    <div class="intrebare" style="margin-bottom: 20px;">
+        <p><strong>{{ forloop.counter }}. {{ i.text_intrebare }}</strong></p>
+        
+        <div class="variante">
+            <p>A: {{ i.varianta_a }}</p>
+            <p>B: {{ i.varianta_b }}</p>
+            <p>C: {{ i.varianta_c }}</p>
+            <p>D: {{ i.varianta_d }}</p>
+        </div>
+
+        {% if varianta == 'profesor' %}
+            <p class="raspuns-corect" style="color: green; font-weight: bold;">
+                Răspuns corect: {{ i.raspuns_corect }}
+            </p>
+        {% endif %}
+    </div>
+    {% endfor %}
+</div>

@@ -1,0 +1,98 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LearnEffix - {{ clasa.nume_materie }}</title>
+    <link rel="stylesheet" href="{% static 'CSS/detalii_clasa_style.css' %}">
+</head>
+<body>
+
+    <header class="navbar">
+        <div class="logo">LearnEffix</div>
+        <nav>
+            <a href="{% url 'dashboard_elev' %}">← Înapoi la cursuri</a>
+            <a href="{% url 'logout' %}" class="logout-btn">Logout</a>
+        </nav>
+    </header>
+
+    <main class="container">
+        <section class="class-header">
+            <div>
+                <span class="badge">Anul {{ clasa.an_studiu }}</span>
+                <h1>{{ clasa.nume_materie }}</h1>
+                <p class="subtitle">Profesor: {{ clasa.profesor.nume }} | Specializare: {{ clasa.specializare }}</p>
+            </div>
+        </section>
+
+        <div class="content-layout">
+            <div class="main-content">
+                
+                <section class="section-box">
+                    <h2>Materiale de curs</h2>
+                    <div class="item-list">
+                        {% for mat in materiale %}
+                        <div class="item-card">
+                            <div class="item-info">
+                                <span class="icon">📄</span>
+                                <div>
+                                    <h4>{{ mat.titlu }}</h4>
+                                    <small class="muted">Postat la: {{ mat.data_incarcarii|date:"d.m.Y" }}</small>
+                                </div>
+                            </div>
+                            <a href="{{ mat.fisier_pdf.url }}" target="_blank" class="btn-sm">Deschide PDF</a>
+                        </div>
+                        {% empty %}
+                        <p class="muted">Nu au fost încărcate materiale pentru acest curs.</p>
+                        {% endfor %}
+                    </div>
+                </section>
+
+                <section class="section-box">
+                    <h2>Teste disponibile</h2>
+                    <div class="item-list">
+                        {% for test in teste %}
+                        <div class="item-card">
+                            <div class="item-info">
+                                <span class="icon">📝</span>
+                                <div>
+                                    <h4>{{ test.titlu }}</h4>
+                                    <small class="muted">{{ test.intrebari.count }} întrebări</small>
+                                </div>
+                            </div>
+                            <div class="item-actions">
+                                <a href="{% url 'export_pdf' test.id %}?varianta=elev" class="btn-sm ghost">Descarcă PDF</a>
+                                <a href="{% url 'sustine_test' test.id %}" class="btn-sm">Susține testul</a>                            </div>
+                        </div>
+                        {% empty %}
+                        <p class="muted">Nu sunt teste disponibile momentan.</p>
+                        {% endfor %}
+                    </div>
+                </section>
+            </div>
+
+            <aside class="sidebar">
+                <div class="section-box">
+                    <h2>Colegii mei</h2>
+                    <ul class="student-list">
+                        {% for student in clasa.studenti.all %}
+                        <li>
+                            <div class="avatar">{{ student.nume|slice:":1" }}</div>
+                            <span>{{ student.nume }}</span>
+                        </li>
+                        {% empty %}
+                        <p class="muted">Ești primul student înrolat!</p>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </aside>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>© 2026 LearnEffix – Platformă educațională</p>
+    </footer>
+
+</body>
+</html>

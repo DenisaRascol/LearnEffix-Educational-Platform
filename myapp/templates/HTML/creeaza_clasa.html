@@ -1,0 +1,66 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <title>Creează Clasă Nouă - LearnEffix</title>
+    <link rel="stylesheet" href="{% static 'CSS/dashboard_profesor_style.css' %}">
+    <style>
+        .form-group { margin-bottom: 1.2rem; }
+        label { display: block; margin-bottom: 5px; font-weight: 600; color: var(--verde-inchis); }
+        input[type="text"], select {
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid rgba(59, 47, 47, 0.2);
+            background: white;
+            font-size: 1rem;
+        }
+        select { cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="container" style="max-width: 550px;">
+        <div class="card">
+            <h2 style="margin-bottom: 20px; text-align: center;">🏫 Creează o clasă nouă</h2>
+            
+            <form method="POST">
+                {% csrf_token %}
+                
+                <div class="form-group">
+                    <label for="nume_materie">Materie</label>
+                    <input type="text" id="nume_materie" name="nume_materie" placeholder="ex: Programare" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="specializare">Specializare</label>
+                    <select id="specializare" name="specializare" required>
+                        <option value="" disabled selected>Alege specializarea...</option>
+                        <option value="Informatică Română">Informatică Română</option>
+                        <option value="Informatică Engleză">Informatică Engleză</option>
+                        <option value="Inteligență Artificială">Inteligență Artificială</option>
+                        <option value="Informatică Română, învatământ de la distanță">Informatică Română, învatământ de la distanță</option>
+                        <option value="Alta">Alta</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="an">An de studiu</label>
+                    <select id="an" name="an" required>
+                        <option value="" disabled selected>Alege anul...</option>
+                        <option value="1">Anul 1</option>
+                        <option value="2">Anul 2</option>
+                        <option value="3">Anul 3</option>
+                        <option value="4">Anul 4</option>
+                    </select>
+                </div>
+
+                <div style="margin-top: 30px;">
+                    <button type="submit" class="btn primary full-width">Salvează Clasa</button>
+                    <a href="{% url 'dashboard_profesor' %}" style="display: block; text-align: center; margin-top: 15px; text-decoration: none;" class="muted">Anulează</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

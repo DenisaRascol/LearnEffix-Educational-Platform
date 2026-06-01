@@ -1,30 +1,56 @@
 {% load static %}
 <!DOCTYPE html>
-<html>
+<html lang="ro">
 <head>
-    <title>Vizualizare Test</title>
-    <link rel="stylesheet" href="{% static 'CSS/style.css' %}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vizualizare Test - {{ test.titlu }}</title>
+    <link rel="stylesheet" href="{% static 'CSS/detalii_test.css' %}">
 </head>
-<body style="padding: 50px; background-color: #f4f7f6; font-family: sans-serif;">
-    <div style="max-width: 800px; margin: auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-        <h1>{{ test.titlu }}</h1>
-        <p>Sursa material: {{ test.material_sursa.titlu }}</p>
-        <hr>
+<body>
+    <div class="test-container">
+        <header class="test-header">
+            <h1>{{ test.titlu }}</h1>
+            <p class="sursa">Sursă material: <span>{{ test.material_sursa.titlu }}</span></p>
+        </header>
         
-        {% for intrebare in intrebari %}
-            <div style="margin-bottom: 30px;">
-                <h3>{{ forloop.counter }}. {{ intrebare.text_intrebare }}</h3>
-                <ul style="list-style-type: none; padding: 0;">
-                    <li><strong>A:</strong> {{ intrebare.varianta_a }}</li>
-                    <li><strong>B:</strong> {{ intrebare.varianta_b }}</li>
-                    <li><strong>C:</strong> {{ intrebare.varianta_c }}</li>
-                    <li><strong>D:</strong> {{ intrebare.varianta_d }}</li>
-                </ul>
-                <p style="color: green;"><strong>Răspuns corect: {{ intrebare.raspuns_corect }}</strong></p>
-            </div>
-        {% endfor %}
+        <hr class="separator">
+
+        <div class="export-controls">
+            <a href="{% url 'export_pdf' test.id %}?varianta=elev" class="btn btn-elev">
+                📄 Exportă PDF (Varianta Elev)
+            </a>
+
+            <a href="{% url 'export_pdf' test.id %}?varianta=profesor" class="btn btn-profesor">
+                🎓 Exportă PDF (Varianta Profesor)
+            </a>
+            <a href="{% url 'sterge_test' test.id %}" 
+            class="btn-delete-final"
+            onclick="return confirm('Atenție! Această acțiune este ireversibilă. Ștergi testul?');">
+            🗑️ Șterge Testul
+            </a>
+        </div>
         
-        <a href="{% url 'dashboard_profesor' %}" class="btn">Înapoi la Dashboard</a>
+        <div class="intrebari-lista">
+            {% for intrebare in intrebari %}
+                <div class="intrebare-card">
+                    <h3>{{ forloop.counter }}. {{ intrebare.text_intrebare }}</h3>
+                    <ul class="variante-lista">
+                        <li><strong>A:</strong> {{ intrebare.varianta_a }}</li>
+                        <li><strong>B:</strong> {{ intrebare.varianta_b }}</li>
+                        <li><strong>C:</strong> {{ intrebare.varianta_c }}</li>
+                        <li><strong>D:</strong> {{ intrebare.varianta_d }}</li>
+                    </ul>
+                    <div class="raspuns-corect">
+                        <strong>Răspuns corect: {{ intrebare.raspuns_corect }}</strong>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        
+        <div class="footer-actions">
+            <a href="{% url 'dashboard_profesor' %}" class="btn-back">← Înapoi la Dashboard</a>
+        </div>
     </div>
 </body>
 </html>

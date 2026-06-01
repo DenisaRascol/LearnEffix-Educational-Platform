@@ -1,0 +1,84 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editează Test - LearnEffix</title>
+    <link rel="stylesheet" href="{% static 'CSS/editare_test_style.css' %}">
+</head>
+<body>
+
+    <header class="navbar">
+        <div class="logo">LearnEffix</div>
+        <nav>
+            <a href="{% url 'home' %}">Acasă</a>
+            <a href="{% url 'dashboard_profesor' %}">Dashboard</a>
+            <a href="{% url 'logout' %}" class="logout-btn">Logout</a>
+        </nav>
+    </header>
+
+    <main class="edit-container">
+        <section class="page-header">
+            <div>
+                <h1>Editează: {{ test.titlu }}</h1>
+                <p class="subtitle">Modifică întrebările sau variantele de răspuns generate de AI.</p>
+            </div>
+        </section>
+
+        <form method="POST">
+            {% csrf_token %}
+            
+            {% for i in intrebari %}
+            <div class="card-editare">
+                <h3>Întrebarea {{ forloop.counter }}</h3>
+                
+                <div class="input-group">
+                    <label>Text Întrebare:</label>
+                    <textarea name="intrebare_{{ i.id }}_text">{{ i.text_intrebare }}</textarea>
+                </div>
+                
+                <div class="options-grid">
+                    <div class="option-input">
+                        <span>A:</span>
+                        <input type="text" name="intrebare_{{ i.id }}_a" value="{{ i.varianta_a }}">
+                    </div>
+                    <div class="option-input">
+                        <span>B:</span>
+                        <input type="text" name="intrebare_{{ i.id }}_b" value="{{ i.varianta_b }}">
+                    </div>
+                    <div class="option-input">
+                        <span>C:</span>
+                        <input type="text" name="intrebare_{{ i.id }}_c" value="{{ i.varianta_c }}">
+                    </div>
+                    <div class="option-input">
+                        <span>D:</span>
+                        <input type="text" name="intrebare_{{ i.id }}_d" value="{{ i.varianta_d }}">
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label>Răspuns corect:</label>
+                    <select name="intrebare_{{ i.id }}_corect">
+                        <option value="A" {% if i.raspuns_corect == 'A' %}selected{% endif %}>Varianta A</option>
+                        <option value="B" {% if i.raspuns_corect == 'B' %}selected{% endif %}>Varianta B</option>
+                        <option value="C" {% if i.raspuns_corect == 'C' %}selected{% endif %}>Varianta C</option>
+                        <option value="D" {% if i.raspuns_corect == 'D' %}selected{% endif %}>Varianta D</option>
+                    </select>
+                </div>
+            </div>
+            {% endfor %}
+
+            <div class="form-actions">
+                <button type="submit" class="btn primary">Salvează modificările</button>
+                <a href="{% url 'dashboard_profesor' %}" class="btn-cancel">Anulează</a>
+            </div>
+        </form>
+    </main>
+
+    <footer class="footer">
+        <p>© 2026 LearnEffix – Dashboard profesor</p>
+    </footer>
+
+</body>
+</html>

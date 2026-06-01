@@ -1,0 +1,110 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LearnEffix - {{ clasa.nume_materie }}</title>
+    <link rel="stylesheet" href="{% static 'CSS/detalii_clasa_style.css' %}">
+</head>
+<body>
+
+    <header class="navbar">
+        <div class="logo">LearnEffix</div>
+        <nav>
+            <a href="{% url 'dashboard_profesor' %}">← Înapoi</a>
+            <a href="{% url 'logout' %}" class="logout-btn">Logout</a>
+        </nav>
+    </header>
+
+    <main class="container">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+
+        <section class="class-header">
+            <div>
+                <span class="badge">Anul {{ clasa.an_studiu }}</span>
+                <h1>{{ clasa.nume_materie }}</h1>
+                <p class="muted">{{ clasa.specializare }} | Cod: <strong>{{ clasa.cod_inrolare }}</strong></p>
+            </div>
+            <div class="header-actions">
+                <a href="{% url 'incarcare_material' clasa.id %}" class="btn primary">+ Adaugă Conținut</a>
+            </div>
+        </section>
+
+        <div class="content-layout">
+            <div class="main-content">
+                
+                <section class="section-box">
+                    <h2>Materiale Încărcate</h2>
+                    <div class="item-list">
+                        {% for mat in materiale %}
+                        <div class="item-card">
+                            <div class="item-info">
+                                <span class="icon">📄</span>
+                                <div>
+                                    <strong>{{ mat.titlu }}</strong><br>
+                                    <small class="muted">Data: {{ mat.data_incarcarii|date:"d.m.Y" }}</small>
+                                </div>
+                            </div>
+                            <div class="item-actions">
+                                <a href="{{ mat.fisier_pdf.url }}" target="_blank" class="btn-sm">Vezi PDF</a>
+                                <form action="{% url 'sterge_material' mat.id %}" method="POST">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn-delete" onclick="return confirm('Ștergi materialul?')">Șterge</button>
+                                </form>
+                            </div>
+                        </div>
+                        {% empty %}
+                        <p class="muted">Niciun material încărcat.</p>
+                        {% endfor %}
+                    </div>
+                </section>
+
+                <section class="section-box">
+                    <h2>Teste Generate</h2>
+                    <div class="item-list">
+                        {% for test in teste %}
+                        <div class="item-card">
+                            <div class="item-info">
+                                <span class="icon">📝</span>
+                                <div>
+                                    <strong>{{ test.titlu }}</strong><br>
+                                    <small class="muted">{{ test.intrebari.count }} întrebări</small>
+                                </div>
+                            </div>
+                            <div class="item-actions">
+                                <a href="{% url 'detalii_test' test.id %}" class="btn-sm">Vezi Test</a>
+                                <a href="{% url 'editare_test' test.id %}" class="btn-sm ghost">✏️ Editează</a>
+                                <a href="{% url 'sterge_test' test.id %}" class="btn-delete" onclick="return confirm('Ștergi testul?')">Șterge</a>
+                            </div>
+                        </div>
+                        {% empty %}
+                        <p class="muted">Niciun test generat.</p>
+                        {% endfor %}
+                    </div>
+                </section>
+            </div>
+
+            <aside class="sidebar">
+                <div class="section-box">
+                    <h2>Studenți ({{ studenti.count }})</h2>
+                    <ul class="student-list">
+                        {% for student in studenti %}
+                        <li>
+                            <div class="avatar">{{ student.nume|slice:":1" }}</div>
+                            <span>{{ student.nume }}</span>
+                        </li>
+                        {% empty %}
+                        <p class="muted">Niciun student înrolat.</p>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </aside>
+        </div>
+    </main>
+</body>
+</html>

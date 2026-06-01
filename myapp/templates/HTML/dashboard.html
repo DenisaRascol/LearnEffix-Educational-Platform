@@ -2,133 +2,115 @@
 <!DOCTYPE html>
 <html lang="ro">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LearnEffix - Dashboard elev</title>
-  <link rel="stylesheet" href="{% static 'CSS/dashboard_style.css' %}" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LearnEffix - Dashboard student</title>
+    <link rel="stylesheet" href="{% static 'CSS/dashboard_style.css' %}" />
 </head>
 <body>
 
-  <!-- Navbar -->
-  <header class="navbar">
-    <div class="logo">LearnEffix</div>
-    <nav>
-        <a href="{% url 'home' %}">Acasă</a>
-        <a href="#">Lecții</a>
-        <a href="#">Teste</a>
-        <a href="{% url 'login' %}" class="logout-btn">Logout</a>
-    </nav>
+    <header class="navbar">
+        <div class="logo">LearnEffix</div>
+        <nav>
+            <a href="{% url 'dashboard_elev' %}">Dashboard</a>
+            <a href="{% url 'logout' %}" class="logout-btn">Logout</a>
+        </nav>
+    </header>
 
-  </header>
+    <main class="container">
+        
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
 
-  <main class="container">
-
-    <!-- Header -->
-    <section class="page-header">
-      <div>
-        <h1>Dashboard elev</h1>
-        <p class="subtitle">
-          Începe cu prima lecție și platforma îți va completa progresul, testele și scorurile automat.
-        </p>
-      </div>
-
-      <div class="quick-actions">
-        <a class="btn primary" href="#">Explorează lecții</a>
-        <a class="btn secondary" href="#">Începe primul test</a>
-      </div>
-    </section>
-
-    <!-- Summary cards (zero state) -->
-    <section class="grid-3">
-      <div class="card summary">
-        <h3>Progres general</h3>
-        <div class="progress-wrap">
-          <div class="progress-bar">
-            <div class="progress-fill" style="width: 0%"></div>
-          </div>
-          <div class="progress-meta">
-            <span>0%</span>
-            <span class="muted">0 lecții parcurse</span>
-          </div>
-        </div>
-        <p class="hint">Parcurge prima lecție pentru a începe progresul.</p>
-      </div>
-
-      <div class="card summary">
-        <h3>Teste completate</h3>
-        <p class="big">0</p>
-        <p class="muted">Nu ai completat încă niciun test.</p>
-        <p class="hint">După ce finalizezi un test, rezultatul apare aici.</p>
-      </div>
-
-      <div class="card summary">
-        <h3>Scor mediu</h3>
-        <p class="big">—</p>
-        <p class="muted">Scorul mediu se calculează după primul test.</p>
-        <p class="hint">Începe un test pentru a genera statistici.</p>
-      </div>
-    </section>
-
-    <!-- Main grid -->
-    <section class="grid-main">
-
-      <!-- Lessons (empty state) -->
-      <div class="card">
-        <div class="card-header">
-          <h2>Lecțiile mele</h2>
-          <a class="link" href="#">Vezi toate</a>
-        </div>
-
-        <div class="empty-state">
-          <div class="empty-icon">📚</div>
-          <h3>Nu ai lecții începute</h3>
-          <p class="muted">
-            Când începi o lecție, va apărea aici cu status și progres.
-          </p>
-          <div class="empty-actions">
-            <a class="btn primary" href="#">Alege o lecție</a>
-            <a class="btn ghost" href="#">Cum funcționează?</a>
-          </div>
-        </div>
-      </div>
-
-      <!-- Side panel -->
-      <aside class="side">
-
-        <!-- Recent tests (empty state) -->
-        <div class="card">
-          <h2>Teste recente</h2>
-
-          <div class="empty-state small">
-            <div class="empty-icon">✅</div>
-            <h3>Încă nu ai teste</h3>
-            <p class="muted">
-              După ce finalizezi un test, istoricul va apărea aici.
-            </p>
-            <div class="empty-actions">
-              <a class="btn small secondary" href="#">Începe un test</a>
+        <section class="page-header">
+            <div>
+                <h1>Salut, {{ request.session.nume_utilizator }}! 👋</h1>
+                <p class="subtitle">Gestionează-ți cursurile și verifică-ți progresul la teste.</p>
             </div>
-          </div>
-        </div>
+            <div class="enroll-box">
+                <form action="{% url 'inrolare_clasa' %}" method="POST" class="quick-actions">
+                    {% csrf_token %}
+                    <input type="text" name="cod_inrolare" placeholder="Introdu codul clasei..." required class="input-code">
+                    <button type="submit" class="btn primary">Înscrie-te la curs</button>
+                </form>
+            </div>
+        </section>
 
-        <!-- Recommendations -->
-        <div class="card">
-          <h2>Recomandări</h2>
-          <ul class="recommendations">
-            <li>Începe cu o lecție introductivă pentru a activa progresul.</li>
-            <li>Rezolvă un test scurt ca să obții primul scor.</li>
-            <li>Revenino zilnic pentru a menține consistența.</li>
-          </ul>
-        </div>
+        <section class="grid-3">
+            <div class="card summary">
+                <h3>Cursuri active</h3>
+                <p class="big">{{ clase.count }}</p>
+                <p class="muted">Clase la care ești înscris.</p>
+            </div>
 
-      </aside>
-    </section>
+            <div class="card summary">
+                <h3>Teste completate</h3>
+                <p class="big">0</p>
+                <p class="muted">Niciun test susținut încă.</p>
+            </div>
 
-  </main>
+            <div class="card summary">
+                <h3>Scor mediu</h3>
+                <p class="big">—</p>
+                <p class="muted">Bazat pe ultimele teste.</p>
+            </div>
+        </section>
 
-  <footer class="footer">
-    <p>© 2026 LearnEffix – Dashboard elev</p>
-  </footer>
+        <section class="grid-main">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Cursurile mele</h2>
+                </div>
+
+                <div class="item-list">
+                    {% for clasa in clase %}
+                    <div class="class-item-card">
+                        <div class="class-info">
+                            <span class="class-icon">🏫</span>
+                            <div>
+                                <h4>{{ clasa.nume_materie }}</h4>
+                                <small class="muted">Profesor: {{ clasa.autor.nume }}</small>
+                            </div>
+                        </div>
+                        <a href="{% url 'detalii_clasa_elev' clasa.id %}" class="btn-sm">Intră la curs</a>
+                    </div>
+                    {% empty %}
+                    <div class="empty-state">
+                        <div class="empty-icon">📚</div>
+                        <h3>Nu ești înscris la niciun curs</h3>
+                        <p class="muted">Cere codul de la profesorul tău și introdu-l mai sus pentru a începe.</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <aside class="side">
+                <div class="card">
+                    <h2>Rezultate recente</h2>
+                    <div class="empty-state small">
+                        <p class="muted">După ce finalizezi un test, scorul tău va apărea aici.</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>Notificări</h2>
+                    <ul class="recommendations">
+                        <li>Verifică secțiunea de materiale pentru noutăți.</li>
+                        <li>Ai un test nou disponibil la Programare 1.</li>
+                    </ul>
+                </div>
+            </aside>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p>© 2026 LearnEffix – Dashboard student</p>
+    </footer>
 
 </body>
 </html>

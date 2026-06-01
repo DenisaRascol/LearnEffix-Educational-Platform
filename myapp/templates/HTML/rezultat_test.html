@@ -1,0 +1,84 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rezultat Test - LearnEffix</title>
+    <link rel="stylesheet" href="{% static 'CSS/dashboard_style.css' %}">
+</head>
+<body>
+
+    <header class="navbar">
+        <div class="logo">LearnEffix</div>
+        <nav>
+            <a href="{% url 'dashboard' %}">Dashboard</a>
+            <a href="{% url 'logout' %}" class="logout-btn">Logout</a>
+        </nav>
+    </header>
+
+    <main class="container">
+        <div class="card" style="text-align: center; padding: 40px 20px;">
+            <h2 style="border: none; margin-bottom: 5px;">Test Finalizat!</h2>
+            <p class="muted" style="margin-bottom: 25px;">{{ test.titlu }}</p>
+            
+            <div style="display: inline-block; background: var(--fundal-pagina); padding: 20px 40px; border-radius: 12px; margin-bottom: 20px;">
+                <span style="font-size: 1.1rem; display: block; color: var(--text-mut);">Nota ta</span>
+                <span style="font-size: 3.5rem; font-weight: 800; color: var(--verde-accent);">{{ nota }}</span>
+            </div>
+            
+            <p style="font-size: 1.1rem; font-weight: 600;">
+                Ai răspuns corect la <span style="color: var(--verde-accent)">{{ raspunsuri_corecte }}</span> din {{ total_intrebari }} întrebări.
+            </p>
+        </div>
+
+        <h3 style="margin: 30px 0 15px 0; color: var(--text-principal);">Revizuire răspunsuri</h3>
+        
+        <div class="item-list">
+            {% for item in istoric_raspunsuri %}
+                <div class="card {% if item.este_corect %}raspuns-card-corect{% else %}raspuns-card-gresit{% endif %}" style="margin-bottom: 15px; padding: 20px;">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 15px; flex-wrap: wrap;">
+                        <div>
+                            <h4 style="font-size: 1.05rem; margin-bottom: 10px; color: var(--text-principal);">
+                                {{ forloop.counter }}. {{ item.intrebare.text_intrebare }}
+                            </h4>
+                            
+                            <p style="font-size: 0.95rem; margin: 4px 0;">
+                                <strong>Răspunsul tău:</strong> 
+                                <span class="{% if item.este_corect %}text-succes{% else %}text-eroare{% endif %}">
+                                    ({{ item.raspuns_elev }}) {{ item.text_raspuns_elev }}
+                                </span>
+                            </p>
+                            
+                            {% if not item.este_corect %}
+                                <p style="font-size: 0.95rem; margin: 4px 0; color: #1e3a2e;">
+                                    <strong>Răspuns corect:</strong> 
+                                    <span style="font-weight: 600;">({{ item.intrebare.raspuns_corect }}) {{ item.text_raspuns_corect }}</span>
+                                </p>
+                            {% endif %}
+                        </div>
+                        
+                        <div>
+                            {% if item.este_corect %}
+                                <span style="background: #d1fae5; color: #065f46; padding: 4px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: 700;">Corect</span>
+                            {% else %}
+                                <span style="background: #fee2e2; color: #991b1b; padding: 4px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: 700;">Greșit</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <div style="margin-top: 30px; text-align: center;">
+            <a href="{% url 'dashboard' %}" class="btn primary" style="text-decoration: none; display: inline-block;">Înapoi la cursuri</a>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>© 2026 LearnEffix – Dashboard student</p>
+    </footer>
+
+</body>
+</html>
