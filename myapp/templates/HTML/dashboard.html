@@ -41,26 +41,6 @@
             </div>
         </section>
 
-        <section class="grid-3">
-            <div class="card summary">
-                <h3>Cursuri active</h3>
-                <p class="big">{{ clase.count }}</p>
-                <p class="muted">Clase la care ești înscris.</p>
-            </div>
-
-            <div class="card summary">
-                <h3>Teste completate</h3>
-                <p class="big">0</p>
-                <p class="muted">Niciun test susținut încă.</p>
-            </div>
-
-            <div class="card summary">
-                <h3>Scor mediu</h3>
-                <p class="big">—</p>
-                <p class="muted">Bazat pe ultimele teste.</p>
-            </div>
-        </section>
-
         <section class="grid-main">
             <div class="card">
                 <div class="card-header">
@@ -74,7 +54,7 @@
                             <span class="class-icon">🏫</span>
                             <div>
                                 <h4>{{ clasa.nume_materie }}</h4>
-                                <small class="muted">Profesor: {{ clasa.autor.nume }}</small>
+                                <small class="muted">Profesor: {{ clasa.profesor.nume }}</small>
                             </div>
                         </div>
                         <a href="{% url 'detalii_clasa_elev' clasa.id %}" class="btn-sm">Intră la curs</a>
@@ -90,19 +70,22 @@
             </div>
 
             <aside class="side">
-                <div class="card">
-                    <h2>Rezultate recente</h2>
-                    <div class="empty-state small">
-                        <p class="muted">După ce finalizezi un test, scorul tău va apărea aici.</p>
+                <div class="card status-bar">
+                    <div class="status-item">
+                        <span class="status-icon">📖</span>
+                        <div>
+                            <h3>Cursuri active</h3>
+                            <p class="accent-text">{{ clase.count }} clase înrolate</p>
+                        </div>
                     </div>
                 </div>
 
-                <div class="card">
-                    <h2>Notificări</h2>
-                    <ul class="recommendations">
-                        <li>Verifică secțiunea de materiale pentru noutăți.</li>
-                        <li>Ai un test nou disponibil la Programare 1.</li>
-                    </ul>
+                <div class="card catalog-card-button">
+                    <h2>📚 Situație Școlară</h2>
+                    <p class="subtitle-side">Verifică notele primite și media ta actuală la toate disciplinele.</p>
+                    <a href="{% url 'catalog_student' %}" class="btn primary full-width-btn" style="display: block; text-align: center; margin-top: 15px; text-decoration: none;">
+                        Deschide Catalogul Online
+                    </a>
                 </div>
             </aside>
         </section>

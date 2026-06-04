@@ -90,21 +90,34 @@
             </div>
 
             <aside class="sidebar">
-                <div class="section-box">
-                    <h2>Studenți ({{ studenti.count }})</h2>
-                    <ul class="student-list">
+                <div class="catalog-btn-container">
+                    <a href="{% url 'catalog_clasa' clasa.id %}" class="btn primary catalog-redirect-btn">
+                        📊 Deschide Catalogul Clasei
+                    </a>
+                </div>
+
+                <div class="section-box catalog-box">
+                    <h2>👥 Studenți Înrolați ({{ studenti|length }})</h2>
+                    <div class="catalog-list">
                         {% for student in studenti %}
-                        <li>
-                            <div class="avatar">{{ student.nume|slice:":1" }}</div>
-                            <span>{{ student.nume }}</span>
-                        </li>
+                        <div class="catalog-student-card">
+                            <div class="student-details">
+                                <span class="student-name">{{ student.nume }}</span>
+                                <small class="muted student-email">{{ student.email }}</small>
+                            </div>
+                        </div>
                         {% empty %}
-                        <p class="muted">Niciun student înrolat.</p>
+                        <p class="muted">Niciun student înrolat în această clasă.</p>
                         {% endfor %}
-                    </ul>
+                    </div>
                 </div>
             </aside>
         </div>
     </main>
+
+    <footer class="footer">
+        <p>© 2026 LearnEffix – Platformă educațională</p>
+    </footer>
+    
 </body>
 </html>

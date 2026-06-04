@@ -18,6 +18,14 @@
     </header>
 
     <main class="container">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}" style="padding: 12px; margin-bottom: 20px; border-radius: 6px; background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb;">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
         <section class="class-header">
             <div>
                 <span class="badge">Anul {{ clasa.an_studiu }}</span>
@@ -63,7 +71,8 @@
                             </div>
                             <div class="item-actions">
                                 <a href="{% url 'export_pdf' test.id %}?varianta=elev" class="btn-sm ghost">Descarcă PDF</a>
-                                <a href="{% url 'sustine_test' test.id %}" class="btn-sm">Susține testul</a>                            </div>
+                                <a href="{% url 'sustine_test' test.id %}" class="btn-sm">Susține testul</a>
+                            </div>
                         </div>
                         {% empty %}
                         <p class="muted">Nu sunt teste disponibile momentan.</p>

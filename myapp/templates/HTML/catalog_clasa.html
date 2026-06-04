@@ -1,0 +1,120 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catalog - {{ clasa.nume_materie }}</title>
+    <link rel="stylesheet" href="{% static 'CSS/detalii_clasa_style.css' %}">
+    <link rel="stylesheet" href="{% static 'CSS/catalog_style.css' %}">
+</head>
+<body>
+
+    <header class="navbar">
+        <div class="logo">LearnEffix - Catalog</div>
+        <nav>
+            <a href="{% url 'detalii_clasa' clasa.id %}">← Înapoi la clasă</a>
+            <a href="{% url 'logout' %}" class="logout-btn">Logout</a>
+        </nav>
+    </header>
+
+    <main class="container">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+
+        <section class="catalog-header">
+            <div>
+                <h1>Catalogul Clasei: {{ clasa.nume_materie }}</h1>
+                <p class="muted-text">{{ clasa.specializare }} | Anul {{ clasa.an_studiu }}</p>
+            </div>
+        </section>
+
+        <section class="section-box">
+            <h2>Situație Școlară Studenți</h2>
+            <div class="students-catalog-list">
+                
+                {% for student in studenti %}
+                <div class="student-catalog-card">
+                    
+                    <div class="student-card-header">
+                        <div class="student-meta">
+                            <div class="student-avatar">
+                                {{ student.nume|slice:":1" }}
+                            </div>
+                            <div class="student-info">
+                                <strong class="student-fullname">{{ student.nume }}</strong>
+                                <small class="muted-text">{{ student.email }}</small>
+                            </div>
+                        </div>
+                        <div class="student-average">
+                            Medie curentă: <strong class="average-score">{{ student.media }}</strong>
+                        </div>
+                    </div>
+
+                    <div class="student-grades-section">
+                        <span class="muted-text section-title">Note înregistrate:</span>
+                        <div class="student-notes-vertical-list">
+                            {% for nota in student.note_clasa %}
+                                <div class="grade-row-item {% if nota.tip == 'TEST' %}type-test{% else %}type-manual{% endif %}">
+                                    <div class="grade-info-side">
+                                        <span class="grade-display-value">{{ nota.valoare }}</span>
+                                        <span class="grade-type-label">
+                                            {% if nota.tip == 'TEST' %}Test Online{% else %}Notă Manuală{% endif %}
+                                        </span>
+                                        <span class="grade-date-label">({{ nota.data_acordarii|date:'d.m.Y' }})</span>
+                                    </div>
+                                    
+                                    <div class="grade-actions-side">
+                                        <form action="{% url 'editeaza_nota' clasa.id %}" method="POST" class="inline-edit-form">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="nota_id" value="{{ nota.id }}">
+                                            <select name="noua_valoare" onchange="this.form.submit()" class="select-inline-modify">
+                                                <option value="">Modifică</option>
+                                                {% for i in "1"|rjust:"10"|make_list %}
+                                                    <option value="{{ forloop.counter }}" {% if nota.valoare == forloop.counter %}selected{% endif %}>{{ forloop.counter }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </form>
+
+                                        <form action="{% url 'sterge_nota' clasa.id %}" method="POST" class="inline-delete-form" onsubmit="return confirm('Sigur doriți să ștergeți această notă?');">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="nota_id" value="{{ nota.id }}">
+                                            <button type="submit" class="btn-inline-delete">Șterge</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            {% empty %}
+                                <p class="muted-text empty-notice">Nu are nicio notă înregistrată.</p>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="add-grade-box">
+                        <span class="box-title">➕ Acordă Notă Manuală (Activitate)</span>
+                        <form action="{% url 'adauga_nota_manual' clasa.id %}" method="POST" class="add-grade-form">
+                            {% csrf_token %}
+                            <input type="hidden" name="student_id" value="{{ student.id }}">
+                            <input type="hidden" name="tip" value="ACTIVITATE">
+                            <div class="form-group">
+                                <input type="number" name="valoare" min="1" max="10" placeholder="Nota (1-10)" required class="input-grade">
+                            </div>
+                            <button type="submit" class="btn-save-grade">
+                                Salvează Nota
+                            </button>
+                        </form>
+                    </div>
+
+                </div>
+                {% empty %}
+                <p class="muted-text">Nu există studenți înrolați pentru a le gestiona situația.</p>
+                {% endfor %}
+
+            </div>
+        </section>
+    </main>
+
+</body>
+</html>

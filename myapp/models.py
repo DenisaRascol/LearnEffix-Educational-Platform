@@ -86,3 +86,19 @@ class RezultatTest(models.Model):
 
     def __str__(self):
         return f"{self.student.nume} - {self.test.titlu}: {self.punctaj}"
+
+class Nota(models.Model):
+    TIP_NOTE = [
+        ('TEST', 'Test Online'),
+        ('ACTIVITATE', 'Activitate la clasă'),
+    ]
+    
+    student = models.ForeignKey(Utilizator, on_delete=models.CASCADE, limit_choices_to={'rol': 'elev'})
+    clasa = models.ForeignKey(Clasa, on_delete=models.CASCADE)
+    test = models.ForeignKey('Test', on_delete=models.CASCADE, null=True, blank=True) 
+    valoare = models.IntegerField() 
+    tip = models.CharField(max_length=20, choices=TIP_NOTE, default='TEST')
+    data_acordarii = models.DateField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.student.nume} - {self.clasa.nume_materie}: {self.valoare}"

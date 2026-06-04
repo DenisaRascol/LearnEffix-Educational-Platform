@@ -125,6 +125,30 @@ def detalii_clasa(request, clasa_id):
         'user': user
     })
 
+
+def adauga_nota_manual(request, clasa_id):
+    user_id = request.session.get('user_id')
+    if not user_id or request.method != "POST":
+        return redirect('login')
+        
+    clasa = get_object_or_404(Clasa, id=clasa_id, profesor__id=user_id)
+    student_id = request.POST.get('student_id')
+    valoare_nota = request.POST.get('valoare')
+    tip_nota = request.POST.get('tip')
+    
+    student = get_object_or_404(Utilizator, id=student_id, rol='elev')
+    
+    from .models import Nota
+    Nota.objects.create(
+        student=student,
+        clasa=clasa,
+        valoare=int(valoare_nota),
+        tip=tip_nota
+    )
+    
+    messages.success(request, f"Nota {valoare_nota} a fost adăugată cu succes pentru {student.nume}!")
+    return redirect('catalog_clasa', clasa_id=clasa.id)
+
 def creeaza_clasa(request):
     user_id = request.session.get('user_id')
     if not user_id:
@@ -361,21 +385,42 @@ def detalii_test(request, test_id):
 
 from django.shortcuts import get_object_or_404, redirect
 from django.contrib import messages
+from django.db.models import Avg
 
 def sterge_test(request, test_id):
     test = get_object_or_404(Test, pk=test_id)
-    clasa_id = test.clasa.id
+    clasa = test.clasa
+
+    studenti_clasa = clasa.studenti.all() 
+    
     test.delete()
+    
+    for student in studenti_clasa:
+        note_ramase = Nota.objects.filter(student=student, clasa=clasa)
+        
+        if note_ramase.exists():
+            media_noua = note_ramase.aggregate(Avg('valoare'))['valoare__avg']
+            student.media = round(media_noua, 2)
+        else:
+            student.media = 0.0 
+        
+        student.save() 
+        
     messages.success(request, "Testul a fost șters cu succes!")
-    return redirect('detalii_clasa', clasa_id=clasa_id)
+    return redirect('detalii_clasa', clasa_id=clasa.id)
+
 
 def sterge_material(request, material_id):
     user_id = request.session.get('user_id')
     if not user_id:
         return redirect('login')
 
-    material = get_object_or_404(Material, id=material_id, autor_id=user_id)
+    material = get_object_or_404(Material, id=material_id)
     clasa_id = material.clasa.id 
+
+    if material.clasa.profesor.id != user_id:
+        messages.error(request, "Nu ai permisiunea să ștergi materiale din această clasă!")
+        return redirect('detalii_clasa', clasa_id=clasa_id)
     
     if request.method == "POST":
         material.delete()
@@ -476,12 +521,35 @@ def detalii_clasa_elev(request, clasa_id):
         'materiale': materiale,
         'teste': teste
     })
+    
+
+def sustine_test(request, test_id):
+    user_id = request.session.get('user_id')
+    if not user_id:
+        return redirect('login')
+        
+    test = get_object_or_404(Test, id=test_id)
+    student = get_object_or_404(Utilizator, id=user_id)
+    
+    if RezultatTest.objects.filter(student=student, test=test).exists():
+        messages.warning(request, "Nu poți reface acest test. Permisiunea este de o singură încercare!")
+        return redirect('detalii_clasa_elev', clasa_id=test.clasa.id)
+        
+    return render(request, 'HTML/sustine_test.html', {'test': test})
+
 
 def calculeaza_rezultat(request, test_id):
     if request.method == "POST":
         test = get_object_or_404(Test, id=test_id)
         user_id = request.session.get('user_id')
+        if not user_id:
+            return redirect('login')
+            
         student = get_object_or_404(Utilizator, id=user_id)
+        
+        if RezultatTest.objects.filter(student=student, test=test).exists():
+            messages.error(request, "Ai susținut deja acest test! Nota ta a fost deja înregistrată.")
+            return redirect('detalii_clasa_elev', clasa_id=test.clasa.id)
         
         intrebari = test.intrebari.all()
         raspunsuri_corecte = 0
@@ -512,6 +580,18 @@ def calculeaza_rezultat(request, test_id):
             test=test,
             punctaj=nota_finala
         )
+        
+        nota_catalog = round(nota_finala)
+        if nota_catalog < 1: 
+            nota_catalog = 1  
+            
+        from .models import Nota
+        Nota.objects.create(
+            student=student,
+            clasa=test.clasa,
+            valoare=nota_catalog,
+            tip='TEST'
+        )
 
         context = {
             'test': test,
@@ -522,8 +602,115 @@ def calculeaza_rezultat(request, test_id):
         }
         return render(request, 'HTML/rezultat_test.html', context)
         
-    return redirect('dashboard')
+    return redirect('dashboard_elev')
+
+
+from django.db.models import Avg
+from .models import Nota
+
+def catalog_clasa(request, clasa_id):
+    user_id = request.session.get('user_id')
+    if not user_id:
+        return redirect('login')
+        
+    user = get_object_or_404(Utilizator, id=user_id)
+    clasa = get_object_or_404(Clasa, id=clasa_id, profesor=user)
+    studenti = clasa.studenti.all()
+
+    from django.db.models import Avg
+    from .models import Nota
+
+    for student in studenti:
+        student.note_clasa = Nota.objects.filter(student=student, clasa=clasa).order_by('-id')
+        media_calc = Nota.objects.filter(student=student, clasa=clasa).aggregate(Avg('valoare'))['valoare__avg']
+        student.media = round(media_calc, 2) if media_calc else "-"
+
+    return render(request, 'HTML/catalog_clasa.html', {
+        'clasa': clasa,
+        'studenti': studenti,
+        'user': user
+    })
+
+def editeaza_nota(request, clasa_id):
+    user_id = request.session.get('user_id')
+    if not user_id or request.method != "POST":
+        return redirect('login')
+        
+    clasa = get_object_or_404(Clasa, id=clasa_id, profesor__id=user_id)
+    nota_id = request.POST.get('nota_id')
+    noua_valoare = request.POST.get('noua_valoare')
     
-def sustine_test(request, test_id):
-    test = get_object_or_404(Test, id=test_id)
-    return render(request, 'HTML/sustine_test.html', {'test': test})
+    from .models import Nota
+    nota = get_object_or_404(Nota, id=nota_id, clasa=clasa)
+    
+    valoare_veche = nota.valoare
+    nota.valoare = int(noua_valoare)
+    nota.save()
+    
+    messages.success(request, f"Nota studentului {nota.student.nume} a fost modificată cu succes din {valoare_veche} în {noua_valoare}!")
+    return redirect('catalog_clasa', clasa_id=clasa.id)
+
+from django.shortcuts import get_object_or_404, redirect
+from django.contrib import messages
+from django.db.models import Avg
+from .models import Nota, Clasa
+
+def sterge_nota(request, clasa_id):
+    if request.method == "POST":
+        nota_id = request.POST.get("nota_id")
+        nota = get_object_or_404(Nota, id=nota_id)
+        student = nota.student
+        clasa = nota.clasa
+        
+        nota.delete()
+        
+        note_ramase = Nota.objects.filter(student=student, clasa=clasa)
+        if note_ramase.exists():
+            media_noua = note_ramase.aggregate(Avg('valoare'))['valoare__avg']
+            student.media = round(media_noua, 2)
+        else:
+            student.media = 0.0
+            
+        student.save()
+        messages.success(request, "Nota a fost ștearsă cu succes, iar media a fost recalculată!")
+        
+    return redirect('catalog_clasa', clasa_id=clasa_id)
+
+def catalog_student(request):
+    user_id = request.session.get('user_id')
+    if not user_id:
+        return redirect('login')
+        
+    try:
+        student = Utilizator.objects.get(id=user_id)
+        if student.rol != 'elev':
+            return redirect('dashboard_profesor')
+    except Utilizator.DoesNotExist:
+        request.session.flush()
+        return redirect('login')
+    
+    clase_inrolate = student.clase_inrolate.all()
+    
+    situatii_materii = []
+    
+    for clasa in clase_inrolate:
+        note_materie = Nota.objects.filter(student=student, clasa=clasa).order_by('-id')
+        
+        media_calc = note_materie.aggregate(Avg('valoare'))['valoare__avg']
+        media_finala = round(media_calc, 2) if media_calc else "-"
+        
+        for n in note_materie:
+            if n.tip == 'TEST':
+                n.tip_evaluare = 'Test Online'
+            else:
+                n.tip_evaluare = 'Nota acordată manual'
+        
+        situatii_materii.append({
+            'clasa': clasa,
+            'media': media_finala,
+            'note': note_materie
+        })
+        
+    return render(request, 'HTML/catalog_student.html', {
+        'situatii_materii': situatii_materii
+    })

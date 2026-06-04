@@ -12,10 +12,9 @@
     <header class="navbar-quiz">
         <div class="logo">LearnEffix</div>
         <div class="test-info">
-            <span class="test-name">{{ test.titlu }}</span>
-            <div class="timer-box">
-                <span class="icon">⏱️</span>
-                <span id="timer">Test în desfășurare</span>
+            <div class="status-badge">
+                <span class="icon">📝</span>
+                <span>{{ test.intrebari.count }} Întrebări</span>
             </div>
         </div>
     </header>
@@ -36,7 +35,7 @@
                 
                 <div class="options-grid">
                     <label class="option-container">
-                        <input type="radio" name="intrebare_{{ intrebare.id }}" value="A" required>
+                        <input type="radio" name="intrebare_{{ intrebare.id }}" value="A">
                         <span class="checkmark">A</span>
                         <span class="option-text">{{ intrebare.varianta_a }}</span>
                     </label>
@@ -63,12 +62,47 @@
             {% endfor %}
 
             <div class="quiz-footer">
-                <button type="submit" class="btn-submit" onclick="return confirm('Ești sigur că vrei să finalizezi testul?')">
+                <button type="submit" class="btn-submit">
                     Finalizează și Trimite Răspunsurile
                 </button>
             </div>
         </form>
     </main>
+
+    <script>
+        document.getElementById('quiz-form').addEventListener('submit', function(event) {
+            const questionCards = document.querySelectorAll('.question-card');
+            let toateCompletate = true;
+            let primaIntrebareNecompletata = null;
+
+            questionCards.forEach((card, index) => {
+                const radioBifat = card.querySelector('input[type="radio"]:checked');
+                
+                if (!radioBifat) {
+                    toateCompletate = false;
+                    if (!primaIntrebareNecompletata) {
+                        primaIntrebareNecompletata = card;
+                    }
+                }
+            });
+
+            if (!toateCompletate) {
+                event.preventDefault(); 
+                
+                alert("⚠️ Atenție! Nu ai răspuns la toate întrebările. Te rugăm să completezi toate întrebările înainte de a trimite testul.");
+                
+                if (primaIntrebareNecompletata) {
+                    primaIntrebareNecompletata.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            } 
+            else {
+                const confirmare = confirm("Ești sigur că vrei să finalizezi testul și să trimiți răspunsurile?");
+                if (!confirmare) {
+                    event.preventDefault(); 
+                }
+            }
+        });
+    </script>
 
 </body>
 </html>

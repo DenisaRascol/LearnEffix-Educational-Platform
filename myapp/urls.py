@@ -22,4 +22,9 @@ urlpatterns = [
     path('clasa-elev/<int:clasa_id>/', views.detalii_clasa_elev, name='detalii_clasa_elev'),
     path('test/<int:test_id>/sustine/', views.sustine_test, name='sustine_test'),
     path('test/<int:test_id>/rezultat/', views.calculeaza_rezultat, name='calculeaza_rezultat'),
+    path('clasa/<int:clasa_id>/adauga-nota/', views.adauga_nota_manual, name='adauga_nota_manual'),
+    path('clasa/<int:clasa_id>/catalog/', views.catalog_clasa, name='catalog_clasa'),
+    path('clasa/<int:clasa_id>/editeaza-nota/', views.editeaza_nota, name='editeaza_nota'),
+    path('clasa/<int:clasa_id>/catalog/sterge-nota/', views.sterge_nota, name='sterge_nota'),
+    path('catalog-ul-meu/', views.catalog_student, name='catalog_student'),
 ]

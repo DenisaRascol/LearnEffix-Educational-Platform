@@ -1,0 +1,78 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LearnEffix - Catalogul Meu</title>
+    <link rel="stylesheet" href="{% static 'CSS/catalog_student_style.css' %}">
+</head>
+<body class="catalog-body">
+
+    <header class="navbar">
+        <div class="logo">LearnEffix - Catalog</div>
+        <nav>
+            <a href="{% url 'dashboard' %}">← Înapoi la dashboard</a>
+            <a href="{% url 'logout' %}" class="logout-btn">Logout</a>
+        </nav>
+    </header>
+
+    <main class="container">
+        <section class="page-header">
+            <div>
+                <h1>Catalogul Meu Academic</h1>
+                <p class="subtitle">Aici poți urmări notele obținute și situația ta în timp real.</p>
+            </div>
+        </section>
+
+        <section class="catalog-grid">
+            {% for situatie in situatii_materii %}
+            <div class="subject-card">
+                <div class="subject-header">
+                    <div>
+                        <h2>{{ situatie.clasa.nume_materie }}</h2>
+                        <p class="prof-name">Profesor: {{ situatie.clasa.profesor.nume }}</p>
+                    </div>
+                    <div class="media-box">
+                        <span class="media-label">Medie curentă</span>
+                        <span class="media-value {% if situatie.media >= 5 %}promovat{% else %}corigent{% endif %}">
+                            {{ situatie.media|default:"-" }}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="grades-section">
+                    <h3>Note obținute:</h3>
+                    <div class="grades-wrapper">
+                        {% for nota in situatie.note %}
+                        <div class="grade-badge-container">
+                            <div class="grade-pill">
+                                <span class="grade-number">{{ nota.valoare }}</span>
+                                <div class="grade-details">
+                                    <span class="grade-type">{{ nota.tip_evaluare }}</span>
+                                    <span class="grade-date">{{ nota.data_acordarii|date:"d.m.Y" }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        {% empty %}
+                        <p class="no-grades">Nu ai obținut încă nicio notă la această materie.</p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="empty-catalog">
+                <div class="empty-icon">📂</div>
+                <h3>Nu există materii înregistrate în catalog</h3>
+                <p class="muted">După ce te vei înscrie la cursuri, situația ta școlară va apărea aici.</p>
+            </div>
+            {% endfor %}
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p>© 2026 LearnEffix – Platformă educațională</p>
+    </footer>
+
+</body>
+</html>

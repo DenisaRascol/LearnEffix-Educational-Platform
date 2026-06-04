@@ -3,6 +3,7 @@
 <html lang="ro">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LearnEffix - Home</title>
     <link rel="stylesheet" href="{% static 'CSS/home_style.css' %}">        
 </head>
@@ -12,44 +13,69 @@
         <div class="logo">LearnEffix</div>
         <nav>
             <a href="#">Acasă</a>
-            <a href="#">Lecții</a>
-            <a href="#">Teste</a>
-            <a href="{% url 'login' %}">Autentificare</a>
+            <a href="#despre" class="nav-scroll">Despre</a>
+            <a href="{% url 'login' %}" class="logout-btn">Autentificare</a>
         </nav>
     </header>
 
-    <section class="hero">
-        <h1>Învață inteligent. Testează-te automat.</h1>
-        <p>
-            Platformă educațională web pentru elevi și profesori,
-            cu lecții structurate și teste generate automat din materiale PDF.
-        </p>
-        <div class="hero-buttons">
-            <a href="#" class="btn primary">Începe acum</a>
-            <a href="#" class="btn secondary">Află mai multe</a>
-        </div>
-    </section>
+    <main class="main-content">
+        <section class="hero">
+            <h1>Educație digitală.<br>Evaluare inteligentă.</h1>
+            <p>
+                O platformă educațională completă concepută pentru a simplifica managementul cursurilor și evaluarea studenților. Profesorii pot încărca materiale de studiu în format PDF pentru a genera rapid teste interactive, oferind studenților un mediu eficient de testare și fixare a cunoștințelor.
+            </p>
+            <div class="hero-buttons">
+                <a href="{% url 'login' %}" class="btn primary">Începe acum</a>
+                <a href="#despre" class="btn ghost nav-scroll">Află mai multe</a>
+            </div>
+        </section>
 
-    <section class="features">
-        <div class="feature-card">
-            <h3>Lecții structurate</h3>
-            <p>Accesează materiale educaționale organizate logic și ușor de parcurs.</p>
-        </div>
+        <section id="despre" class="features-section">
+            <h2 class="section-title">Cum funcționează LearnEffix?</h2>
+            <p class="section-subtitle">O experiență adaptată complet în funcție de nevoile tale</p>
 
-        <div class="feature-card">
-            <h3>Teste automate</h3>
-            <p>Verifică-ți cunoștințele prin teste generate automat.</p>
-        </div>
+            <div class="grid-2">
+                <div class="role-card profesor-card">
+                    <div class="card-icon">👨‍🏫</div>
+                    <h3>Pentru Profesori</h3>
+                    <p>Gestionează clasele într-un mod eficient și salvează timp prețios dedicat evaluării.</p>
+                    <ul class="role-features">
+                        <li>Incarcare materiale de curs (PDF)</li>
+                        <li>Generare automată de teste cu AI</li>
+                        <li>Corectare rapidă și evidența notelor</li>
+                    </ul>
+                    <a href="{% url 'login' %}" class="btn primary full-width">Cont Profesor</a>
+                </div>
 
-        <div class="feature-card">
-            <h3>Generare din PDF</h3>
-            <p>Profesorii pot încărca fișiere PDF din care se creează teste.</p>
-        </div>
-    </section>
+                <div class="role-card student-card">
+                    <div class="card-icon">🎓</div>
+                    <h3>Pentru Studenți</h3>
+                    </h3>
+                    <p>Accesează cursurile interactive și testează-ți cunoștințele într-un mod dinamic.</p>
+                    <ul class="role-features">
+                        <li>Înrolare rapidă la clase pe bază de cod</li>
+                        <li>Susținere teste interactive online</li>
+                        <li>Vizualizarea imediată a rezultatelor și erorilor</li>
+                    </ul>
+                    <a href="{% url 'login' %}" class="btn ghost full-width">Cont Student</a>
+                </div>
+            </div>
+        </section>
+    </main>
 
     <footer class="footer">
         <p>© 2026 LearnEffix – Proiect licență</p>
     </footer>
 
+    <script>
+        document.querySelectorAll('.nav-scroll').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
 </body>
 </html>

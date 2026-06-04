@@ -17,6 +17,10 @@ body {
     background: var(--alb-cald);
     color: var(--maro-inchis);
     line-height: 1.6;
+
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
 .navbar {
@@ -62,6 +66,7 @@ body {
 .container {
     width: min(1200px, 92%);
     margin: 40px auto;
+    flex: 1;
 }
 
 .page-header {
@@ -198,7 +203,7 @@ body {
     color: var(--alb-cald);
     text-align: center;
     padding: 20px;
-    margin-top: 60px;
+    margin-top: auto;
 }
 
 @media (max-width: 768px) {

@@ -14,35 +14,50 @@
     --border: rgba(59, 47, 47, 0.12);
 }
 
+
 body {
-    background-color: var(--alb-cald);
+    background: var(--alb-cald);
     color: var(--maro-inchis);
     line-height: 1.6;
+
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
 .container { 
     width: min(1200px, 92%); 
     margin: 40px auto; 
+    flex: 1;
 }
 
 .navbar {
     background: var(--verde-inchis);
     color: var(--alb-cald);
-    padding: 14px 36px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding: 14px 36px;
 }
 
-.navbar a { 
-    color: var(--alb-cald); 
-    text-decoration: none; 
-    margin-left: 20px; 
+.logo {
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: 0.3px;
+}
+
+.navbar a {
+    color: var(--alb-cald);
+    text-decoration: none;
+    margin-left: 18px;
     font-weight: 600;
+    opacity: 0.95;
     transition: 0.3s;
 }
 
-.navbar a:hover { opacity: 0.8; text-decoration: underline; }
+.navbar a:hover {
+    text-decoration: underline;
+}
 
 .class-header {
     background: var(--bej-deschis);
@@ -73,6 +88,14 @@ body {
     display: grid;
     grid-template-columns: 2fr 1fr;
     gap: 30px;
+}
+
+.footer {
+    background: var(--verde-inchis);
+    color: var(--alb-cald);
+    text-align: center;
+    padding: 20px;
+    margin-top: auto;
 }
 
 .section-box {
@@ -257,4 +280,177 @@ h2 {
     border: 1px solid var(--verde-deschis);
     color: var(--verde-inchis);
     font-weight: 600;
+}
+
+.catalog-box {
+    border-top: 4px solid var(--maro-accent) !important;
+}
+
+.catalog-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-top: 15px;
+}
+
+.catalog-student-card {
+    background: #fafafa;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    border-left: 4px solid var(--verde-inchis);
+    transition: all 0.25s ease;
+}
+
+.catalog-student-card:hover {
+    background: #ffffff;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+}
+
+.student-main-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.student-name {
+    font-weight: 700;
+    color: var(--maro-accent);
+}
+
+.student-media {
+    font-size: 0.85rem;
+    color: #555;
+}
+
+.student-media strong {
+    color: var(--verde-inchis);
+    background: var(--bej-deschis);
+    padding: 2px 8px;
+    border-radius: 50px;
+    margin-left: 3px;
+}
+
+.student-notes-timeline {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 5px 0;
+}
+
+.badge-nota {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    font-weight: 800;
+    font-size: 0.85rem;
+    cursor: help;
+}
+
+.badge-nota.test-auto {
+    background-color: #e9f5ee;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.badge-nota.clasa-manual {
+    background-color: var(--bej-deschis);
+    color: var(--maro-accent);
+    border: 1px solid rgba(59, 47, 47, 0.2);
+}
+
+.form-nota-inline {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-top: 5px;
+    border-top: 1px dashed var(--border);
+    padding-top: 10px;
+}
+
+.input-nota-val {
+    width: 60px;
+    padding: 6px;
+    border-radius: 6px;
+    border: 1px solid var(--border-color, #d1d9d5);
+    font-weight: 600;
+    text-align: center;
+    outline: none;
+}
+
+.input-nota-val:focus {
+    border-color: var(--verde-inchis);
+}
+
+.select-nota-tip {
+    flex: 1;
+    padding: 6px;
+    border-radius: 6px;
+    border: 1px solid var(--border-color, #d1d9d5);
+    font-size: 0.85rem;
+    background: #fff;
+    cursor: pointer;
+}
+
+.btn-add-nota {
+    background: var(--verde-inchis);
+    color: white;
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+}
+
+.btn-add-nota:hover {
+    background: var(--verde-deschis);
+    color: var(--verde-inchis);
+}
+
+.catalog-btn-container {
+    margin-bottom: 20px;
+}
+
+.catalog-redirect-btn {
+    display: block;
+    text-align: center;
+    text-decoration: none;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.catalog-student-card {
+    padding: 12px 0;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    align-items: center;
+}
+
+.student-details {
+    display: flex;
+    flex-direction: column;
+    text-align: left; 
+}
+
+.student-name {
+    font-weight: 500;
+    font-size: 1rem;
+    color: #333;
+}
+
+.student-email {
+    font-size: 0.85rem;
+    margin-top: 2px;
 }
