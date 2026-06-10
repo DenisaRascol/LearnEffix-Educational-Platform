@@ -109,12 +109,11 @@ def detalii_clasa(request, clasa_id):
         return redirect('login')
     
     user = get_object_or_404(Utilizator, id=user_id)
-
     clasa = get_object_or_404(Clasa, id=clasa_id, profesor=user)
 
-    materiale = clasa.materiale.all().order_by('-data_incarcarii')
-    teste = clasa.teste.all().order_by('-creat_la')
+    materiale = clasa.materiale.exclude(titlu__startswith="[Sursă Test]").order_by('-data_incarcarii')
     
+    teste = clasa.teste.all().order_by('-creat_la')
     studenti = clasa.studenti.all() if hasattr(clasa, 'studenti') else []
 
     return render(request, 'HTML/detalii_clasa.html', {
@@ -217,6 +216,7 @@ def genereaza_intrebari_ai(text_extras):
         return []
 
 def incarcare_material(request, clasa_id):
+   
     user_id = request.session.get('user_id')
     if not user_id: 
         return redirect('login')
@@ -238,15 +238,14 @@ def incarcare_material(request, clasa_id):
                 'clasa': clasa
             })
 
-        print(f"--- Începe procesarea pentru: {titlu} (Clasa: {clasa.nume_materie}) ---")
-        
+        print(f"--- Începe generarea testului pentru: {titlu} ---")
+      
         material = Material.objects.create(
-            titlu=titlu, 
+            titlu=f"[Sursă Test] {titlu}", 
             fisier_pdf=fisier, 
             autor=user,
             clasa=clasa  
         )
-        print("Material salvat în baza de date.")
 
         try:
             with open(material.fisier_pdf.path, 'rb') as pdf_file:
@@ -256,26 +255,24 @@ def incarcare_material(request, clasa_id):
                     text_complet += cititor.pages[i].extract_text() or ""
                 
                 if not text_complet.strip():
-                    print("Eroare: Nu s-a putut extrage text din PDF.")
+                    material.delete() 
                     return render(request, 'HTML/incarcare_material.html', {
                         'eroare': 'PDF-ul pare gol sau necitibil.',
                         'clasa': clasa
                     })
 
-                print(f"Text extras cu succes ({len(text_complet)} caractere).")
-
                 noul_test = Test.objects.create(
-                    titlu=f"Test: {material.titlu}", 
+                    titlu=titlu, 
                     material_sursa=material, 
                     autor=user,
                     clasa=clasa 
                 )
                 
-                print("Se procesează textul prin AI...")
                 lista_intrebari = genereaza_intrebari_ai(text_complet)
                 
                 if not lista_intrebari:
-                    print("Eroare: nu s-a returnat nicio întrebare.")
+                    noul_test.delete()
+                    material.delete()
                     return render(request, 'HTML/incarcare_material.html', {
                         'eroare': 'Nu s-au putut genera întrebări. Verifică serviciul AI!',
                         'clasa': clasa
@@ -291,7 +288,6 @@ def incarcare_material(request, clasa_id):
                         varianta_d=item.get('D', '-'),
                         raspuns_corect=item.get('corect', 'A')
                     )
-                print(f"Succes! S-au salvat {len(lista_intrebari)} întrebări.")
 
         except Exception as e:
             print(f"Eroare critică la procesare: {e}")
@@ -303,6 +299,42 @@ def incarcare_material(request, clasa_id):
         return redirect('detalii_clasa', clasa_id=clasa.id)
 
     return render(request, 'HTML/incarcare_material.html', {'clasa': clasa})
+
+
+def doar_incarcare_material(request, clasa_id):
+    
+    user_id = request.session.get('user_id')
+    if not user_id: 
+        return redirect('login')
+    
+    try:
+        user = Utilizator.objects.get(id=user_id)
+    except Utilizator.DoesNotExist:
+        return redirect('login')
+
+    clasa = get_object_or_404(Clasa, id=clasa_id, profesor=user)
+
+    if request.method == "POST":
+        titlu = request.POST.get('titlu')
+        fisier = request.FILES.get('fisier_pdf') 
+
+        if not titlu or not fisier:
+            return render(request, 'HTML/incarcare_material.html', {
+                'eroare': 'Te rog completează titlul și alege un fișier!',
+                'clasa': clasa
+            })
+
+        Material.objects.create(
+            titlu=titlu, 
+            fisier_pdf=fisier, 
+            autor=user,
+            clasa=clasa  
+        )
+        messages.success(request, f"Materialul '{titlu}' a fost încărcat cu succes!")
+        return redirect('detalii_clasa', clasa_id=clasa.id)
+
+    return render(request, 'HTML/incarcare_material.html', {'clasa': clasa})
+
 
 from reportlab.pdfgen import canvas
 from reportlab.pdfbase import pdfmetrics
@@ -513,7 +545,8 @@ def detalii_clasa_elev(request, clasa_id):
         messages.error(request, "Nu ai acces la această clasă. Te rugăm să te înrolezi mai întâi.")
         return redirect('dashboard_elev')
 
-    materiale = clasa.materiale.all() 
+    materiale = clasa.materiale.exclude(titlu__startswith="[Sursă Test]").order_by('-data_incarcarii')
+    
     teste = clasa.teste.all() 
     
     return render(request, 'HTML/detalii_clasa_elev.html', {
@@ -714,3 +747,17 @@ def catalog_student(request):
     return render(request, 'HTML/catalog_student.html', {
         'situatii_materii': situatii_materii
     })
+
+def sterge_clasa(request, clasa_id):
+    user_id = request.session.get('user_id')
+    if not user_id:
+        return redirect('login')
+        
+    clasa = get_object_or_404(Clasa, id=clasa_id, profesor__id=user_id)
+    
+    if request.method == "POST":
+        nume_clasa = clasa.nume_materie
+        clasa.delete()
+        messages.success(request, f"Clasa '{nume_clasa}' a fost ștearsă cu succes!")
+        
+    return redirect('dashboard_profesor')

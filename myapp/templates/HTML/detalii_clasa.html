@@ -30,8 +30,10 @@
                 <h1>{{ clasa.nume_materie }}</h1>
                 <p class="muted">{{ clasa.specializare }} | Cod: <strong>{{ clasa.cod_inrolare }}</strong></p>
             </div>
-            <div class="header-actions">
-                <a href="{% url 'incarcare_material' clasa.id %}" class="btn primary">+ Adaugă Conținut</a>
+            
+            <div class="header-actions" style="display: flex; gap: 10px;">
+                <a href="{% url 'doar_incarcare_material' clasa.id %}" class="btn primary" style="background-color: #3a8948;">+ Încarcă Material</a>
+                <a href="{% url 'incarcare_material' clasa.id %}" class="btn primary">+ Generează Test</a>
             </div>
         </section>
 

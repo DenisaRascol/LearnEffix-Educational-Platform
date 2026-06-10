@@ -33,20 +33,35 @@
     <section class="grid-3">
       {% for clasa in clase %}
       <div class="card class-card">
+          
           <div class="card-header">
               <h3>{{ clasa.nume_materie }}</h3>
-              <span class="badge-cod">{{ clasa.cod_inrolare }}</span>
+              
+              <div class="header-actions">
+                  <span class="badge-cod">{{ clasa.cod_inrolare }}</span>
+                  
+                  <div class="dropdown-clasa">
+                      <button class="dropdown-btn" onclick="toggleDropdown(event, 'dropdown-{{ clasa.id }}')">⋮</button>
+                      <div id="dropdown-{{ clasa.id }}" class="dropdown-content">
+                          <form action="{% url 'sterge_clasa' clasa.id %}" method="POST" onsubmit="return confirm('Ești sigur că vrei să ștergi definitiv clasa {{ clasa.nume_materie }}? Toate testele și notele vor fi pierdute!');">
+                              {% csrf_token %}
+                              <button type="submit" class="btn-sterge-clasa">❌ Șterge Clasa</button>
+                          </form>
+                      </div>
+                  </div>
+              </div>
           </div>
+          
           <p class="muted">{{ clasa.specializare }} - Anul {{ clasa.an_studiu }}</p>
           <p class="code-display">Cod: <strong>{{ clasa.cod_inrolare }}</strong></p>
 
-        
           <div class="class-info">
               <span><strong>{{ clasa.nr_studenti }}</strong> studenți</span>
           </div>
 
           <div class="card-footer">
-            <a href="{% url 'detalii_clasa' clasa.id %}" class="btn ghost full-width">Accesează clasa</a>          </div>
+            <a href="{% url 'detalii_clasa' clasa.id %}" class="btn ghost full-width">Accesează clasa</a>
+          </div>
       </div>
       {% empty %}
       <div class="empty-state wide">
@@ -62,6 +77,27 @@
   <footer class="footer">
     <p>© 2026 LearnEffix – Dashboard profesor</p>
   </footer>
+
+  <script>
+  function toggleDropdown(event, id) {
+      event.stopPropagation(); 
+      event.preventDefault();
+      
+      document.querySelectorAll('.dropdown-content').forEach(d => {
+          if(d.id !== id) d.classList.remove('show');
+      });
+      
+      document.getElementById(id).classList.toggle('show');
+  }
+
+  window.onclick = function(event) {
+      if (!event.target.matches('.dropdown-btn')) {
+          document.querySelectorAll('.dropdown-content').forEach(d => {
+              d.classList.remove('show');
+          });
+      }
+  }
+  </script>
 
 </body>
 </html>

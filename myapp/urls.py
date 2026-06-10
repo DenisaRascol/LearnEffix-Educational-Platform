@@ -27,4 +27,6 @@ urlpatterns = [
     path('clasa/<int:clasa_id>/editeaza-nota/', views.editeaza_nota, name='editeaza_nota'),
     path('clasa/<int:clasa_id>/catalog/sterge-nota/', views.sterge_nota, name='sterge_nota'),
     path('catalog-ul-meu/', views.catalog_student, name='catalog_student'),
+    path('clasa/<int:clasa_id>/doar-incarcare/', views.doar_incarcare_material, name='doar_incarcare_material'),
+    path('clasa/<int:clasa_id>/sterge/', views.sterge_clasa, name='sterge_clasa'),
 ]
