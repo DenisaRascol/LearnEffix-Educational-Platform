@@ -182,7 +182,7 @@ def creeaza_clasa(request):
     return render(request, 'HTML/creeaza_clasa.html')
 
 def genereaza_intrebari_ai(text_extras):
-    client = Groq(api_key="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")
+    client = Groq(api_key="GROQ_API_KEY_HERE")
 
     text_scurt = text_extras[:1500] 
 
